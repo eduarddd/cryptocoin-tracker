@@ -60,11 +60,21 @@ class CryptoCoinsAdapter : RecyclerView.Adapter<CryptoCoinsAdapter.CryptoCoinVie
         }
 
         private fun bindIcon(coin: CryptoCoin) {
-            val name = "cf_" + coin.symbol
-            val resId = itemView.resources.getIdentifier(name, "string", itemView.context.packageName)
+            var iconRestId = itemView.resources.getIdentifier(coin.symbol, "string", itemView.context.packageName)
+            var iconColorId = itemView.resources.getIdentifier(coin.symbol, "color", itemView.context.packageName)
 
-            if (resId > 0) {
-                icon.text = itemView.context.getString(resId)
+            if (iconRestId <= 0) {
+                iconRestId = itemView.resources.getIdentifier(coin.name, "string", itemView.context.packageName)
+            }
+            if (iconRestId > 0) {
+                icon.text = itemView.context.getString(iconRestId)
+            }
+
+            if (iconColorId <= 0) {
+                iconColorId = itemView.resources.getIdentifier(coin.name, "color", itemView.context.packageName)
+            }
+            if (iconColorId > 0) {
+                icon.setTextColor(ContextCompat.getColor(itemView.context, iconColorId))
             }
         }
 
