@@ -1,5 +1,6 @@
 package com.nightlydev.cryptocointracker
 
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +9,8 @@ import android.widget.TextView
 import kotlinx.android.synthetic.main.item_crypto_coin.view.*
 
 /**
- * Created by eduardo on 12/5/17.
+ * @author edu (edusevilla90@gmail.com)
+ * @since 5-12-17
  */
 class CryptoCoinsAdapter : RecyclerView.Adapter<CryptoCoinsAdapter.CryptoCoinViewHolder>() {
 
@@ -21,12 +23,9 @@ class CryptoCoinsAdapter : RecyclerView.Adapter<CryptoCoinsAdapter.CryptoCoinVie
     override fun getItemCount(): Int = mItems.size
 
     override fun onBindViewHolder(holder: CryptoCoinViewHolder, position: Int) {
-        val cryptoCoin = mItems[position]
+        val coin = mItems[position]
         holder.resetViews()
-
-        holder.rank.text = cryptoCoin.rank.toString()
-        holder.name.text = cryptoCoin.name
-        holder.priceUsd.text = holder.itemView.context.getString(R.string.price_usd_regex, cryptoCoin.price_usd.toString())
+        holder.bindCryptoCoin(coin)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CryptoCoinViewHolder {
@@ -37,20 +36,68 @@ class CryptoCoinsAdapter : RecyclerView.Adapter<CryptoCoinsAdapter.CryptoCoinVie
         return CryptoCoinViewHolder(view)
     }
 
-    fun add(cryptoCoin: CryptoCoin) {
-        mItems.add(cryptoCoin)
-        notifyItemInserted(mItems.indexOf(cryptoCoin))
+    fun setItems(cryptoCoinList: List<CryptoCoin>) {
+        mItems = ArrayList(cryptoCoinList)
+        notifyDataSetChanged()
     }
 
     class CryptoCoinViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val rank: TextView = itemView.tv_rank
-        val name: TextView = itemView.tv_name
-        val priceUsd: TextView = itemView.tv_price_usd
+        private val icon: CryptoIconTextView = itemView.tv_icon
+        private val rank: TextView = itemView.tv_rank
+        private val symbol: TextView = itemView.tv_symbol
+        private val name: TextView = itemView.tv_name
+        private val priceUsd: TextView = itemView.tv_price_usd
+        private val percentage24h: TextView = itemView.tv_percent_change_24h
+        private val percentage7d: TextView = itemView.tv_percent_change_7d
+
+        fun bindCryptoCoin(coin: CryptoCoin) {
+            bindIcon(coin)
+            rank.text = coin.rank.toString()
+            symbol.text = coin.symbol
+            name.text = coin.name
+            priceUsd.text = itemView.context.getString(R.string.price_usd_regex, coin.price_usd)
+            bindPercentageChanges(coin)
+        }
+
+        private fun bindIcon(coin: CryptoCoin) {
+            val name = "cf_" + coin.symbol
+            val resId = itemView.resources.getIdentifier(name, "string", itemView.context.packageName)
+
+            if (resId > 0) {
+                icon.text = itemView.context.getString(resId)
+            }
+        }
+
+        private fun bindPercentageChanges(coin: CryptoCoin) {
+            val percentageChange24h = coin.percent_change_24h
+            val percentageChange7d = coin.percent_change_7d
+
+
+            val green = ContextCompat.getColor(itemView.context, R.color.green)
+            val red = ContextCompat.getColor(itemView.context, R.color.red)
+
+            if (percentageChange24h > 0) {
+                percentage24h.setTextColor(green)
+            } else {
+                percentage24h.setTextColor(red)
+            }
+            percentage24h.text = percentageChange24h.toString()
+
+            if (percentageChange7d > 0) {
+                percentage7d.setTextColor(green)
+            } else {
+                percentage7d.setTextColor(red)
+            }
+            percentage7d.text = percentageChange7d.toString()
+        }
 
         fun resetViews() {
+            icon.text = ""
             rank.text = ""
             name.text = ""
             priceUsd.text= ""
+            percentage24h.text = ""
+            percentage7d.text = ""
         }
     }
 }

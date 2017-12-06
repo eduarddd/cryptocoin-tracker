@@ -6,9 +6,16 @@
     android:layout_height="match_parent"
     tools:context="com.nightlydev.cryptocointracker.OverviewActivity">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_crypto_coins_overview"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_crypto_coins_overview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>

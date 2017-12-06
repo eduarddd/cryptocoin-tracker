@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">CryptoCoin Tracker</string>
 
-    <string name="price_usd_regex">$ $1%s</string>
+    <string name="price_usd_regex">$ %.2f</string>
+    <string name="percentage_24h_regex">24h: %.2f</string>
+    <string name="percentage_7d_regex">7d: %.2f</string>
 </resources>
