@@ -12,8 +12,12 @@ import kotlinx.android.synthetic.main.activity_overview.*
  * @author edu (edusevilla90@gmail.com)
  * @since 5-12-17
  */
-class OverviewActivity : Activity(), SwipeRefreshLayout.OnRefreshListener {
-    private var mAdapter = CryptoCoinsAdapter()
+class OverviewActivity : Activity(), SwipeRefreshLayout.OnRefreshListener, CryptoCoinsAdapter.OnClickHandler {
+    companion object {
+        val TAG_CRYPTO_COIN_DIALOG = "CRYPTO_COIN_DIALOG"
+    }
+
+    private lateinit var mAdapter: CryptoCoinsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +36,10 @@ class OverviewActivity : Activity(), SwipeRefreshLayout.OnRefreshListener {
         fetchCryptoCoinsList()
     }
 
+    override fun onClick(cryptoCoin: CryptoCoin) {
+        showCryptoCoinDetailDialogFragment(cryptoCoin)
+    }
+
     private fun initRecyclerView() {
         with(swipe_refresh_layout) {
             setOnRefreshListener(this@OverviewActivity)
@@ -39,7 +47,7 @@ class OverviewActivity : Activity(), SwipeRefreshLayout.OnRefreshListener {
         with(rv_crypto_coins_overview) {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(this@OverviewActivity)
-            mAdapter = CryptoCoinsAdapter()
+            mAdapter = CryptoCoinsAdapter(this@OverviewActivity)
             adapter = mAdapter
             addItemDecoration(DividerItemDecoration(this@OverviewActivity))
         }
@@ -57,5 +65,13 @@ class OverviewActivity : Activity(), SwipeRefreshLayout.OnRefreshListener {
                     error -> error.printStackTrace()
                     swipe_refresh_layout.isRefreshing = false
                 })
+    }
+
+    private fun showCryptoCoinDetailDialogFragment(cryptoCoin: CryptoCoin) {
+        if (fragmentManager.findFragmentByTag(TAG_CRYPTO_COIN_DIALOG) != null) {
+            return
+        }
+        val fragment = CryptoCoinDetailDialogFragment.newInstance(cryptoCoin)
+        fragment.show(fragmentManager, TAG_CRYPTO_COIN_DIALOG)
     }
 }

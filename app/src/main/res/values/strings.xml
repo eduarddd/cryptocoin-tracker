@@ -1,7 +1,17 @@
 <resources>
     <string name="app_name">CryptoCoin Tracker</string>
 
-    <string name="price_usd_regex">$ %.2f</string>
-    <string name="percentage_24h_regex">24h: %.2f</string>
-    <string name="percentage_7d_regex">7d: %.2f</string>
+    <string name="price_usd_format">$ %1$s</string>
+    <string name="cryptocoin_name_format">%1$s (%2$s)</string>
+    <string name="percentage">%.2f</string>
+
+    <string name="label_price">Price: </string>
+    <string name="label_market_cap">Market cap: </string>
+    <string name="label_total_supply">Total supply: </string>
+    <string name="label_percent_change_1_hour">Percent change(1H): </string>
+    <string name="label_percent_change_24_hour">Percent change(24H): </string>
+    <string name="label_percent_change_7_days">Percent change(7d): </string>
+
+    <string name="close">Close</string>
+
 </resources>

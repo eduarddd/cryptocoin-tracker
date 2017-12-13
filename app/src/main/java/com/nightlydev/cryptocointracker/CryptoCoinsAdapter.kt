@@ -1,20 +1,22 @@
 package com.nightlydev.cryptocointracker
 
+import android.annotation.SuppressLint
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import kotlinx.android.synthetic.main.item_crypto_coin.view.*
+import java.text.NumberFormat
 
 /**
  * @author edu (edusevilla90@gmail.com)
  * @since 5-12-17
  */
-class CryptoCoinsAdapter : RecyclerView.Adapter<CryptoCoinsAdapter.CryptoCoinViewHolder>() {
+class CryptoCoinsAdapter(clickHandler: OnClickHandler) : RecyclerView.Adapter<CryptoCoinsAdapter.CryptoCoinViewHolder>() {
 
     private var mItems: ArrayList<CryptoCoin>
+    private var mClickHandler = clickHandler
 
     init {
         mItems = ArrayList()
@@ -41,46 +43,48 @@ class CryptoCoinsAdapter : RecyclerView.Adapter<CryptoCoinsAdapter.CryptoCoinVie
         notifyDataSetChanged()
     }
 
-    class CryptoCoinViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val icon: CryptoIconTextView = itemView.tv_icon
-        private val rank: TextView = itemView.tv_rank
-        private val symbol: TextView = itemView.tv_symbol
-        private val name: TextView = itemView.tv_name
-        private val priceUsd: TextView = itemView.tv_price_usd
-        private val percentage24h: TextView = itemView.tv_percent_change_24h
-        private val percentage7d: TextView = itemView.tv_percent_change_7d
+    interface OnClickHandler {
+        fun onClick(cryptoCoin: CryptoCoin)
+    }
+
+    inner class CryptoCoinViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+        private val icon = itemView.tv_icon
+        private val rank = itemView.tv_rank
+        private val name = itemView.tv_name
+        private val priceUsd = itemView.tv_price_usd
+        private val percentage24h = itemView.tv_percent_change_24h
+        private val percentage7d = itemView.tv_percent_change_7d
+
+        override fun onClick(view: View?) {
+            mClickHandler.onClick(mItems[adapterPosition])
+        }
 
         fun bindCryptoCoin(coin: CryptoCoin) {
             bindIcon(coin)
             rank.text = coin.rank.toString()
-            symbol.text = coin.symbol
-            name.text = coin.name
-            priceUsd.text = itemView.context.getString(R.string.price_usd_regex, coin.price_usd)
+            name.text = itemView.context.getString(R.string.cryptocoin_name_format, coin.name, coin.symbol)
+            val formattedPrice = NumberFormat.getNumberInstance().format(coin.price_usd)
+            priceUsd.text = itemView.context.getString(R.string.price_usd_format, formattedPrice)
             bindPercentageChanges(coin)
+            itemView.setOnClickListener(this)
         }
 
         private fun bindIcon(coin: CryptoCoin) {
-            var iconRestId = itemView.resources.getIdentifier(coin.symbol, "string", itemView.context.packageName)
-            var iconColorId = itemView.resources.getIdentifier(coin.symbol, "color", itemView.context.packageName)
+            var iconRestId = coin.icon(itemView.context)
+            var iconColorId = coin.iconColor(itemView.context)
 
-            if (iconRestId <= 0) {
-                iconRestId = itemView.resources.getIdentifier(coin.name, "string", itemView.context.packageName)
-            }
             if (iconRestId > 0) {
                 icon.text = itemView.context.getString(iconRestId)
-            }
-
-            if (iconColorId <= 0) {
-                iconColorId = itemView.resources.getIdentifier(coin.name, "color", itemView.context.packageName)
             }
             if (iconColorId > 0) {
                 icon.setTextColor(ContextCompat.getColor(itemView.context, iconColorId))
             }
         }
 
+        @SuppressLint("SetTextI18n")
         private fun bindPercentageChanges(coin: CryptoCoin) {
-            val percentageChange24h = coin.percent_change_24h
-            val percentageChange7d = coin.percent_change_7d
+            var percentageChange24h = coin.percent_change_24h
+            var percentageChange7d = coin.percent_change_7d
 
 
             val green = ContextCompat.getColor(itemView.context, R.color.green)
@@ -91,14 +95,14 @@ class CryptoCoinsAdapter : RecyclerView.Adapter<CryptoCoinsAdapter.CryptoCoinVie
             } else {
                 percentage24h.setTextColor(red)
             }
-            percentage24h.text = percentageChange24h.toString()
+            percentage24h.text = NumberFormat.getNumberInstance().format(percentageChange24h) + "%"
 
             if (percentageChange7d > 0) {
                 percentage7d.setTextColor(green)
             } else {
                 percentage7d.setTextColor(red)
             }
-            percentage7d.text = percentageChange7d.toString()
+            percentage7d.text = NumberFormat.getNumberInstance().format(percentageChange7d) + "%"
         }
 
         fun resetViews() {
