@@ -5,7 +5,7 @@
     <string name="cryptocoin_name_format">%1$s (%2$s)</string>
     <string name="percentage">%.2f</string>
 
-    <string name="label_price">Price: </string>
+    <string name="label_price">Current price: </string>
     <string name="label_market_cap">Market cap: </string>
     <string name="label_total_supply">Total supply: </string>
     <string name="label_percent_change_1_hour">Percent change(1H): </string>

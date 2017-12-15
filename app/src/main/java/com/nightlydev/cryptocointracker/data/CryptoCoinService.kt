@@ -1,5 +1,6 @@
-package com.nightlydev.cryptocointracker
+package com.nightlydev.cryptocointracker.data
 
+import com.nightlydev.cryptocointracker.model.CryptoCoin
 import io.reactivex.Observable
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory

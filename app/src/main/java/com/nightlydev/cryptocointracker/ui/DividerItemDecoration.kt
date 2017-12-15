@@ -1,4 +1,4 @@
-package com.nightlydev.cryptocointracker
+package com.nightlydev.cryptocointracker.ui
 
 import android.content.Context
 import android.graphics.Canvas

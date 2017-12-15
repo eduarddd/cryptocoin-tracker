@@ -2,11 +2,11 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:padding="16dp">
 
-    <com.nightlydev.cryptocointracker.CryptoIconTextView
+    <com.nightlydev.cryptocointracker.ui.CryptoIconTextView
         android:id="@+id/tv_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -139,4 +139,26 @@
         app:layout_constraintBottom_toBottomOf="@id/tv_percent_change_7d_label"
         tools:text="2.59%"/>
 
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="24dp">
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="?android:attr/progressBarStyle"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
+
+    <com.jjoe64.graphview.GraphView
+        android:id="@+id/graph"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:visibility="invisible"
+        tools:visibility="visible"/>
+
+    </FrameLayout>
 </android.support.constraint.ConstraintLayout>

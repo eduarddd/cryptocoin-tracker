@@ -1,9 +1,13 @@
-package com.nightlydev.cryptocointracker
+package com.nightlydev.cryptocointracker.ui
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
+import com.nightlydev.cryptocointracker.data.CryptoCoinRepository
+import com.nightlydev.cryptocointracker.R
+import com.nightlydev.cryptocointracker.model.CryptoCoin
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_overview.*
@@ -13,9 +17,6 @@ import kotlinx.android.synthetic.main.activity_overview.*
  * @since 5-12-17
  */
 class OverviewActivity : Activity(), SwipeRefreshLayout.OnRefreshListener, CryptoCoinsAdapter.OnClickHandler {
-    companion object {
-        val TAG_CRYPTO_COIN_DIALOG = "CRYPTO_COIN_DIALOG"
-    }
 
     private lateinit var mAdapter: CryptoCoinsAdapter
 
@@ -37,7 +38,7 @@ class OverviewActivity : Activity(), SwipeRefreshLayout.OnRefreshListener, Crypt
     }
 
     override fun onClick(cryptoCoin: CryptoCoin) {
-        showCryptoCoinDetailDialogFragment(cryptoCoin)
+        startCryptoCoinDetailActivity(cryptoCoin)
     }
 
     private fun initRecyclerView() {
@@ -54,7 +55,7 @@ class OverviewActivity : Activity(), SwipeRefreshLayout.OnRefreshListener, Crypt
     }
 
     private fun fetchCryptoCoinsList() {
-        val repository = CryptoCoinRepository(CryptoCoinService.create())
+        val repository = CryptoCoinRepository()
         repository.listCryptoCoins()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -67,11 +68,9 @@ class OverviewActivity : Activity(), SwipeRefreshLayout.OnRefreshListener, Crypt
                 })
     }
 
-    private fun showCryptoCoinDetailDialogFragment(cryptoCoin: CryptoCoin) {
-        if (fragmentManager.findFragmentByTag(TAG_CRYPTO_COIN_DIALOG) != null) {
-            return
-        }
-        val fragment = CryptoCoinDetailDialogFragment.newInstance(cryptoCoin)
-        fragment.show(fragmentManager, TAG_CRYPTO_COIN_DIALOG)
+    private fun startCryptoCoinDetailActivity(cryptoCoin: CryptoCoin) {
+        val intent = Intent(this, CryptoCoinDetailActivity::class.java)
+        intent.putExtra(CryptoCoinDetailActivity.EXTRA_CRYPTO_COIN, cryptoCoin)
+        startActivity(intent)
     }
 }

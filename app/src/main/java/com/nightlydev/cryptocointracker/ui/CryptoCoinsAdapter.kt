@@ -1,4 +1,4 @@
-package com.nightlydev.cryptocointracker
+package com.nightlydev.cryptocointracker.ui
 
 import android.annotation.SuppressLint
 import android.support.v4.content.ContextCompat
@@ -6,6 +6,10 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.nightlydev.cryptocointracker.R
+import com.nightlydev.cryptocointracker.model.CryptoCoin
+import com.nightlydev.cryptocointracker.model.icon
+import com.nightlydev.cryptocointracker.model.iconColor
 import kotlinx.android.synthetic.main.item_crypto_coin.view.*
 import java.text.NumberFormat
 
