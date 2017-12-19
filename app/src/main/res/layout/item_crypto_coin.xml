@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="1" />
 
-    <com.nightlydev.cryptocointracker.ui.CryptoIconTextView
+    <com.nightlydev.cryptocointracker.ui.CryptoCoinIcon
         android:id="@+id/tv_icon"
         android:layout_width="24dp"
         android:layout_height="24dp"

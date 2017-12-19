@@ -8,8 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.nightlydev.cryptocointracker.R
 import com.nightlydev.cryptocointracker.model.CryptoCoin
-import com.nightlydev.cryptocointracker.model.icon
-import com.nightlydev.cryptocointracker.model.iconColor
 import kotlinx.android.synthetic.main.item_crypto_coin.view.*
 import java.text.NumberFormat
 
@@ -64,7 +62,7 @@ class CryptoCoinsAdapter(clickHandler: OnClickHandler) : RecyclerView.Adapter<Cr
         }
 
         fun bindCryptoCoin(coin: CryptoCoin) {
-            bindIcon(coin)
+            icon.setCoin(coin)
             rank.text = coin.rank.toString()
             name.text = itemView.context.getString(R.string.cryptocoin_name_format, coin.name, coin.symbol)
             val formattedPrice = NumberFormat.getNumberInstance().format(coin.price_usd)
@@ -73,22 +71,10 @@ class CryptoCoinsAdapter(clickHandler: OnClickHandler) : RecyclerView.Adapter<Cr
             itemView.setOnClickListener(this)
         }
 
-        private fun bindIcon(coin: CryptoCoin) {
-            var iconRestId = coin.icon(itemView.context)
-            var iconColorId = coin.iconColor(itemView.context)
-
-            if (iconRestId > 0) {
-                icon.text = itemView.context.getString(iconRestId)
-            }
-            if (iconColorId > 0) {
-                icon.setTextColor(ContextCompat.getColor(itemView.context, iconColorId))
-            }
-        }
-
         @SuppressLint("SetTextI18n")
         private fun bindPercentageChanges(coin: CryptoCoin) {
-            var percentageChange24h = coin.percent_change_24h
-            var percentageChange7d = coin.percent_change_7d
+            val percentageChange24h = coin.percent_change_24h
+            val percentageChange7d = coin.percent_change_7d
 
 
             val green = ContextCompat.getColor(itemView.context, R.color.green)

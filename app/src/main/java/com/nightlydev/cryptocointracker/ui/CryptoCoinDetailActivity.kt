@@ -6,15 +6,14 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.view.View
 import android.widget.TextView
-import com.jjoe64.graphview.GraphView
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
 import com.nightlydev.cryptocointracker.R
 import com.nightlydev.cryptocointracker.data.CryptoCoinRepository
+import com.nightlydev.cryptocointracker.data.response.CryptoCoinHistoryPriceItem
+import com.nightlydev.cryptocointracker.data.response.priceHistory
 import com.nightlydev.cryptocointracker.model.CryptoCoin
-import com.nightlydev.cryptocointracker.model.icon
-import com.nightlydev.cryptocointracker.model.iconColor
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_crypto_coin_detail.*
@@ -23,7 +22,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 /**
- * Created by edu on 15-12-17.
+ * @author edu (edusevilla90@gmail.com)
+ * @since 15-12-17
  */
 class CryptoCoinDetailActivity: Activity() {
     companion object {
@@ -32,7 +32,6 @@ class CryptoCoinDetailActivity: Activity() {
     }
 
     private lateinit var mCryptoCoin : CryptoCoin
-    private lateinit var mGraphView: GraphView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,8 +41,7 @@ class CryptoCoinDetailActivity: Activity() {
 
         title = ""
         actionBar.setDisplayHomeAsUpEnabled(true)
-        actionBar.setBackgroundDrawable(ColorDrawable(resources.getColor(mCryptoCoin.iconColor(this))))
-        mGraphView = graph
+        actionBar.setBackgroundDrawable(ColorDrawable(mCryptoCoin.iconColor(this)))
         bindCoinData()
         fetchCryptoCoinHistory(7)
     }
@@ -56,7 +54,7 @@ class CryptoCoinDetailActivity: Activity() {
                 .subscribe({
                     result ->
                         progress_bar.visibility = View.GONE
-                        displayPriceHistoryInfo(result.price)
+                        displayPriceHistoryInfo(result.priceHistory())
                 }, {
                     error ->
                         progress_bar.visibility = View.GONE
@@ -64,46 +62,38 @@ class CryptoCoinDetailActivity: Activity() {
                 })
     }
 
-    private fun displayPriceHistoryInfo(priceHistory: List<List<Any>>) {
+    private fun displayPriceHistoryInfo(priceHistory: List<CryptoCoinHistoryPriceItem>) {
         val dataPoints = ArrayList<DataPoint>()
-        val minX = priceHistory[0][0] as Double
-        val maxX = priceHistory[priceHistory.size -1][0] as Double
+        val minX = priceHistory[0].date.time.toDouble()
+        val maxX = priceHistory[priceHistory.size -1].date.time.toDouble()
+        var minY = priceHistory[0].value
+        var maxY = priceHistory[0].value
 
-        var minY = priceHistory[0][1] as Double
-        var maxY = priceHistory[0][1] as Double
+        for (priceItem in priceHistory) {
+            minY = Math.min(minY, priceItem.value)
+            maxY = Math.max(maxY, priceItem.value)
 
-        for (priceItem: List<Any> in priceHistory) {
-            val dateValue = priceItem[0] as Double
-            val priceValue = priceItem[1] as Double
-            val date = SimpleDateFormat.getDateInstance().format(Date(dateValue.toLong()))
-            val price = NumberFormat.getNumberInstance().format(priceValue)
-
-
-            minY = Math.min(minY, priceValue)
-            maxY = Math.max(maxY, priceValue)
-            dataPoints.add(DataPoint(Date(dateValue.toLong()), priceValue))
+            dataPoints.add(DataPoint(priceItem.date, priceItem.value))
         }
 
         val array = arrayOfNulls<DataPoint>(dataPoints.size)
         val series = LineGraphSeries<DataPoint>(dataPoints.toArray(array))
         series.isDrawBackground = true
 
-        val color = ContextCompat.getColor(this, mCryptoCoin.iconColor(this))
+        val color = mCryptoCoin.iconColor(this)
         series.color = color
         series.backgroundColor = color and 0x00ffffff or (ALPHA shl 24)
         series.thickness = 4
 
-        with(mGraphView) {
+        with(graph_view_history) {
             addSeries(series)
             with(viewport) {
                 isXAxisBoundsManual = true
                 isYAxisBoundsManual = true
                 setMinX(minX)
                 setMaxX(maxX)
-
                 setMinY(minY)
                 setMaxY(maxY)
-
                 isScalable = true
                 isScrollable = true
                 setScalableY(true)
@@ -122,7 +112,7 @@ class CryptoCoinDetailActivity: Activity() {
     }
 
     private fun bindCoinData() {
-        bindIcon()
+        tv_icon.setCoin(mCryptoCoin)
         tv_name.text = getString(R.string.cryptocoin_name_format, mCryptoCoin.name, mCryptoCoin.symbol)
 
         val numberFormat = NumberFormat.getNumberInstance()
@@ -131,14 +121,6 @@ class CryptoCoinDetailActivity: Activity() {
         tv_total_supply.text = getString(R.string.price_usd_format, numberFormat.format(mCryptoCoin.total_supply))
 
         bindPercentages()
-    }
-
-    private fun bindIcon() {
-        val iconStringResId = mCryptoCoin.icon(this)
-        val iconColorResId = mCryptoCoin.iconColor(this)
-
-        if (iconStringResId > 0) tv_icon.text = getString(iconStringResId)
-        if (iconColorResId > 0) tv_icon.setTextColor(ContextCompat.getColor(this, iconColorResId))
     }
 
     private fun bindPercentages() {

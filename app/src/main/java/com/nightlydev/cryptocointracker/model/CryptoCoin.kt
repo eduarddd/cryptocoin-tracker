@@ -56,25 +56,3 @@ data class CryptoCoin(val id: String,
                       val percent_change_7d: Double,
                       val last_updated: Long,
                       val price_eur: Double) : Serializable
-
-
-fun CryptoCoin.iconColor(context: Context): Int {
-    var iconColorId = context.resources.getIdentifier(symbol, "color", context.packageName)
-
-    if (iconColorId <= 0) {
-        iconColorId = context.resources.getIdentifier(name, "color", context.packageName)
-    }
-    if (iconColorId <= 0 || iconColorId == 0xFFFFFF) {
-        iconColorId = R.color.colorPrimary
-    }
-    return iconColorId
-}
-
-fun CryptoCoin.icon(context: Context): Int {
-    var iconRestId = context.resources.getIdentifier(symbol, "string", context.packageName)
-
-    if (iconRestId <= 0) {
-        iconRestId = context.resources.getIdentifier(name, "string", context.packageName)
-    }
-    return iconRestId
-}
