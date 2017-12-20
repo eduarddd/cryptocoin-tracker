@@ -1,538 +1,566 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="ADC_alt">&#xE001;</string>
+    <string name="ADA_alt">&#xE001;</string>
 
-    <string name="ADC">&#xE002;</string>
+    <string name="ADA">&#xE002;</string>
 
-    <string name="AEON_alt">&#xE003;</string>
+    <string name="ADC_alt">&#xE003;</string>
 
-    <string name="AEON">&#xE004;</string>
+    <string name="ADC">&#xE004;</string>
 
-    <string name="AMP_alt">&#xE005;</string>
+    <string name="AEON_alt">&#xE005;</string>
 
-    <string name="AMP">&#xE006;</string>
+    <string name="AEON">&#xE006;</string>
 
-    <string name="ANC_alt">&#xE007;</string>
+    <string name="AMP_alt">&#xE007;</string>
 
-    <string name="ANC">&#xE008;</string>
+    <string name="AMP">&#xE008;</string>
 
-    <string name="ARCH_alt">&#xE009;</string>
+    <string name="ANC_alt">&#xE009;</string>
 
-    <string name="ARCH">&#xE00A;</string>
+    <string name="ANC">&#xE00A;</string>
 
-    <string name="ARDR_alt">&#xE00B;</string>
+    <string name="ARCH_alt">&#xE00B;</string>
 
-    <string name="ARDR">&#xE00C;</string>
+    <string name="ARCH">&#xE00C;</string>
 
-    <string name="AUR_alt">&#xE00D;</string>
+    <string name="ARDR_alt">&#xE00D;</string>
 
-    <string name="AUR">&#xE00E;</string>
+    <string name="ARDR">&#xE00E;</string>
 
-    <string name="BANX_alt">&#xE00F;</string>
+    <string name="ARK_alt">&#xE00F;</string>
 
-    <string name="BANX">&#xE010;</string>
+    <string name="ARK">&#xE010;</string>
 
-    <string name="BAT_alt">&#xE011;</string>
+    <string name="AUR_alt">&#xE011;</string>
 
-    <string name="BAT">&#xE012;</string>
+    <string name="AUR">&#xE012;</string>
 
-    <string name="BAY_alt">&#xE013;</string>
+    <string name="BANX_alt">&#xE013;</string>
 
-    <string name="BAY">&#xE014;</string>
+    <string name="BANX">&#xE014;</string>
 
-    <string name="BC_alt">&#xE015;</string>
+    <string name="BAT_alt">&#xE015;</string>
 
-    <string name="BC">&#xE016;</string>
+    <string name="BAT">&#xE016;</string>
 
-    <string name="BCH_alt">&#xE017;</string>
+    <string name="BAY_alt">&#xE017;</string>
 
-    <string name="BCH">&#xE018;</string>
+    <string name="BAY">&#xE018;</string>
 
-    <string name="BCN_alt">&#xE019;</string>
+    <string name="BC_alt">&#xE019;</string>
 
-    <string name="BCN">&#xE01A;</string>
+    <string name="BC">&#xE01A;</string>
 
-    <string name="BFT_alt">&#xE01B;</string>
+    <string name="BCH_alt">&#xE01B;</string>
 
-    <string name="BFT">&#xE01C;</string>
+    <string name="BCH">&#xE01C;</string>
 
-    <string name="BRK_alt">&#xE01D;</string>
+    <string name="BCN_alt">&#xE01D;</string>
 
-    <string name="BRK">&#xE01E;</string>
+    <string name="BCN">&#xE01E;</string>
 
-    <string name="BRX_alt">&#xE01F;</string>
+    <string name="BFT_alt">&#xE01F;</string>
 
-    <string name="BRX">&#xE020;</string>
+    <string name="BFT">&#xE020;</string>
 
-    <string name="BSD_alt">&#xE021;</string>
+    <string name="BRK_alt">&#xE021;</string>
 
-    <string name="BSD">&#xE022;</string>
+    <string name="BRK">&#xE022;</string>
 
-    <string name="BTA">&#xE023;</string>
+    <string name="BRX_alt">&#xE023;</string>
 
-    <string name="BTC_alt">&#xE024;</string>
+    <string name="BRX">&#xE024;</string>
 
-    <string name="BTC">&#xE025;</string>
+    <string name="BSD_alt">&#xE025;</string>
 
-    <string name="BTCD_alt">&#xE026;</string>
+    <string name="BSD">&#xE026;</string>
 
-    <string name="BTCD">&#xE027;</string>
+    <string name="BTA">&#xE027;</string>
 
-    <string name="BTS_alt">&#xE028;</string>
+    <string name="BTC_alt">&#xE028;</string>
 
-    <string name="BTS">&#xE029;</string>
+    <string name="BTC">&#xE029;</string>
 
-    <string name="CLAM_alt">&#xE02A;</string>
+    <string name="BTCD_alt">&#xE02A;</string>
 
-    <string name="CLAM">&#xE02B;</string>
+    <string name="BTCD">&#xE02B;</string>
 
-    <string name="CLOAK_alt">&#xE02C;</string>
+    <string name="BTM_alt">&#xE02C;</string>
 
-    <string name="CLOAK">&#xE02D;</string>
+    <string name="BTM">&#xE02D;</string>
 
-    <string name="DAO_alt">&#xE02E;</string>
+    <string name="BTS_alt">&#xE02E;</string>
 
-    <string name="DAO">&#xE02F;</string>
+    <string name="BTS">&#xE02F;</string>
 
-    <string name="DASH_alt">&#xE030;</string>
+    <string name="CLAM_alt">&#xE030;</string>
 
-    <string name="DASH">&#xE031;</string>
+    <string name="CLAM">&#xE031;</string>
 
-    <string name="DCR_alt">&#xE032;</string>
+    <string name="CLOAK_alt">&#xE032;</string>
 
-    <string name="DCR">&#xE033;</string>
+    <string name="CLOAK">&#xE033;</string>
 
-    <string name="DCT_alt">&#xE034;</string>
+    <string name="DAO_alt">&#xE034;</string>
 
-    <string name="DCT">&#xE035;</string>
+    <string name="DAO">&#xE035;</string>
 
-    <string name="DGB_alt">&#xE036;</string>
+    <string name="DASH_alt">&#xE036;</string>
 
-    <string name="DGB">&#xE037;</string>
+    <string name="DASH">&#xE037;</string>
 
-    <string name="DGD">&#xE038;</string>
+    <string name="DCR_alt">&#xE038;</string>
 
-    <string name="DGX">&#xE039;</string>
+    <string name="DCR">&#xE039;</string>
 
-    <string name="DMD_alt">&#xE03A;</string>
+    <string name="DCT_alt">&#xE03A;</string>
 
-    <string name="DMD">&#xE03B;</string>
+    <string name="DCT">&#xE03B;</string>
 
-    <string name="DOGE_alt">&#xE03C;</string>
+    <string name="DGB_alt">&#xE03C;</string>
 
-    <string name="DOGE">&#xE03D;</string>
+    <string name="DGB">&#xE03D;</string>
 
-    <string name="EMC_alt">&#xE03E;</string>
+    <string name="DGD">&#xE03E;</string>
 
-    <string name="EMC">&#xE03F;</string>
+    <string name="DGX">&#xE03F;</string>
 
-    <string name="EOS_alt">&#xE040;</string>
+    <string name="DMD_alt">&#xE040;</string>
 
-    <string name="EOS">&#xE041;</string>
+    <string name="DMD">&#xE041;</string>
 
-    <string name="ERC_alt">&#xE042;</string>
+    <string name="DOGE_alt">&#xE042;</string>
 
-    <string name="ERC">&#xE043;</string>
+    <string name="DOGE">&#xE043;</string>
 
-    <string name="ETC_alt">&#xE044;</string>
+    <string name="EMC_alt">&#xE044;</string>
 
-    <string name="ETC">&#xE045;</string>
+    <string name="EMC">&#xE045;</string>
 
-    <string name="ETH_alt">&#xE046;</string>
+    <string name="EOS_alt">&#xE046;</string>
 
-    <string name="ETH">&#xE047;</string>
+    <string name="EOS">&#xE047;</string>
 
-    <string name="FC2_alt">&#xE048;</string>
+    <string name="ERC_alt">&#xE048;</string>
 
-    <string name="FC2">&#xE049;</string>
+    <string name="ERC">&#xE049;</string>
 
-    <string name="FCT_alt">&#xE04A;</string>
+    <string name="ETC_alt">&#xE04A;</string>
 
-    <string name="FCT">&#xE04B;</string>
+    <string name="ETC">&#xE04B;</string>
 
-    <string name="FLO_alt">&#xE04C;</string>
+    <string name="ETH_alt">&#xE04C;</string>
 
-    <string name="FLO">&#xE04D;</string>
+    <string name="ETH">&#xE04D;</string>
 
-    <string name="FRK_alt">&#xE04E;</string>
+    <string name="FC2_alt">&#xE04E;</string>
 
-    <string name="FRK">&#xE04F;</string>
+    <string name="FC2">&#xE04F;</string>
 
-    <string name="FTC_alt">&#xE050;</string>
+    <string name="FCT_alt">&#xE050;</string>
 
-    <string name="FTC">&#xE051;</string>
+    <string name="FCT">&#xE051;</string>
 
-    <string name="GAME_alt">&#xE052;</string>
+    <string name="FLO_alt">&#xE052;</string>
 
-    <string name="GAME">&#xE053;</string>
+    <string name="FLO">&#xE053;</string>
 
-    <string name="GDC_alt">&#xE054;</string>
+    <string name="FRK_alt">&#xE054;</string>
 
-    <string name="GDC">&#xE055;</string>
+    <string name="FRK">&#xE055;</string>
 
-    <string name="GEMZ_alt">&#xE056;</string>
+    <string name="FTC_alt">&#xE056;</string>
 
-    <string name="GEMZ">&#xE057;</string>
+    <string name="FTC">&#xE057;</string>
 
-    <string name="GLD_alt">&#xE058;</string>
+    <string name="GAME_alt">&#xE058;</string>
 
-    <string name="GLD">&#xE059;</string>
+    <string name="GAME">&#xE059;</string>
 
-    <string name="GNO_alt">&#xE05A;</string>
+    <string name="GBYTE_alt">&#xE05A;</string>
 
-    <string name="GNO">&#xE05B;</string>
+    <string name="GBYTE">&#xE05B;</string>
 
-    <string name="GNT_alt">&#xE05C;</string>
+    <string name="GDC_alt">&#xE05C;</string>
 
-    <string name="GNT">&#xE05D;</string>
+    <string name="GDC">&#xE05D;</string>
 
-    <string name="GOLOS_alt">&#xE05E;</string>
+    <string name="GEMZ_alt">&#xE05E;</string>
 
-    <string name="GOLOS">&#xE05F;</string>
+    <string name="GEMZ">&#xE05F;</string>
 
-    <string name="GRC_alt">&#xE060;</string>
+    <string name="GLD_alt">&#xE060;</string>
 
-    <string name="GRC">&#xE061;</string>
+    <string name="GLD">&#xE061;</string>
 
-    <string name="GRS">&#xE062;</string>
+    <string name="GNO_alt">&#xE062;</string>
 
-    <string name="HEAT_alt">&#xE063;</string>
+    <string name="GNO">&#xE063;</string>
 
-    <string name="HEAT">&#xE064;</string>
+    <string name="GNT_alt">&#xE064;</string>
 
-    <string name="ICN_alt">&#xE065;</string>
+    <string name="GNT">&#xE065;</string>
 
-    <string name="ICN">&#xE066;</string>
+    <string name="GOLOS_alt">&#xE066;</string>
 
-    <string name="IFC_alt">&#xE067;</string>
+    <string name="GOLOS">&#xE067;</string>
 
-    <string name="IFC">&#xE068;</string>
+    <string name="GRC_alt">&#xE068;</string>
 
-    <string name="INCNT_alt">&#xE069;</string>
+    <string name="GRC">&#xE069;</string>
 
-    <string name="INCNT">&#xE06A;</string>
+    <string name="GRS">&#xE06A;</string>
 
-    <string name="IOC_alt">&#xE06B;</string>
+    <string name="HEAT_alt">&#xE06B;</string>
 
-    <string name="IOC">&#xE06C;</string>
+    <string name="HEAT">&#xE06C;</string>
 
-    <string name="IOTA_alt">&#xE06D;</string>
+    <string name="ICN_alt">&#xE06D;</string>
 
-    <string name="IOTA">&#xE06E;</string>
+    <string name="ICN">&#xE06E;</string>
 
-    <string name="JBS_alt">&#xE06F;</string>
+    <string name="IFC_alt">&#xE06F;</string>
 
-    <string name="JBS">&#xE070;</string>
+    <string name="IFC">&#xE070;</string>
 
-    <string name="KMD_alt">&#xE071;</string>
+    <string name="INCNT_alt">&#xE071;</string>
 
-    <string name="KMD">&#xE072;</string>
+    <string name="INCNT">&#xE072;</string>
 
-    <string name="KOBO">&#xE073;</string>
+    <string name="IOC_alt">&#xE073;</string>
 
-    <string name="KORE_alt">&#xE074;</string>
+    <string name="IOC">&#xE074;</string>
 
-    <string name="KORE">&#xE075;</string>
+    <string name="IOTA_alt">&#xE075;</string>
 
-    <string name="LBC_alt">&#xE076;</string>
+    <string name="IOTA">&#xE076;</string>
 
-    <string name="LBC">&#xE077;</string>
+    <string name="JBS_alt">&#xE077;</string>
 
-    <string name="LDOGE_alt">&#xE078;</string>
+    <string name="JBS">&#xE078;</string>
 
-    <string name="LDOGE">&#xE079;</string>
+    <string name="KMD_alt">&#xE079;</string>
 
-    <string name="LISK_alt">&#xE07A;</string>
+    <string name="KMD">&#xE07A;</string>
 
-    <string name="LISK">&#xE07B;</string>
+    <string name="KOBO">&#xE07B;</string>
 
-    <string name="LTC_alt">&#xE07C;</string>
+    <string name="KORE_alt">&#xE07C;</string>
 
-    <string name="LTC">&#xE07D;</string>
+    <string name="KORE">&#xE07D;</string>
 
-    <string name="MAID_alt">&#xE07E;</string>
+    <string name="LBC_alt">&#xE07E;</string>
 
-    <string name="MAID">&#xE07F;</string>
+    <string name="LBC">&#xE07F;</string>
 
-    <string name="MCO_alt">&#xE080;</string>
+    <string name="LDOGE_alt">&#xE080;</string>
 
-    <string name="MCO">&#xE081;</string>
+    <string name="LDOGE">&#xE081;</string>
 
-    <string name="MINT_alt">&#xE082;</string>
+    <string name="LSK_alt">&#xE082;</string>
 
-    <string name="MINT">&#xE083;</string>
+    <string name="LSK">&#xE083;</string>
 
-    <string name="MONA_alt">&#xE084;</string>
+    <string name="LTC_alt">&#xE084;</string>
 
-    <string name="MONA">&#xE085;</string>
+    <string name="LTC">&#xE085;</string>
 
-    <string name="MRC">&#xE086;</string>
+    <string name="MAID_alt">&#xE086;</string>
 
-    <string name="MSC_alt">&#xE087;</string>
+    <string name="MAID">&#xE087;</string>
 
-    <string name="MSC">&#xE088;</string>
+    <string name="MCO_alt">&#xE088;</string>
 
-    <string name="MTR_alt">&#xE089;</string>
+    <string name="MCO">&#xE089;</string>
 
-    <string name="MTR">&#xE08A;</string>
+    <string name="MINT_alt">&#xE08A;</string>
 
-    <string name="MUE_alt">&#xE08B;</string>
+    <string name="MINT">&#xE08B;</string>
 
-    <string name="MUE">&#xE08C;</string>
+    <string name="MONA_alt">&#xE08C;</string>
 
-    <string name="NBT">&#xE08D;</string>
+    <string name="MONA">&#xE08D;</string>
 
-    <string name="NEO_alt">&#xE08E;</string>
+    <string name="MRC">&#xE08E;</string>
 
-    <string name="NEO">&#xE08F;</string>
+    <string name="MSC_alt">&#xE08F;</string>
 
-    <string name="NEOS_alt">&#xE090;</string>
+    <string name="MSC">&#xE090;</string>
 
-    <string name="NEOS">&#xE091;</string>
+    <string name="MTR_alt">&#xE091;</string>
 
-    <string name="NEU_alt">&#xE092;</string>
+    <string name="MTR">&#xE092;</string>
 
-    <string name="NEU">&#xE093;</string>
+    <string name="MUE_alt">&#xE093;</string>
 
-    <string name="NLG_alt">&#xE094;</string>
+    <string name="MUE">&#xE094;</string>
 
-    <string name="NLG">&#xE095;</string>
+    <string name="NBT">&#xE095;</string>
 
-    <string name="NMC_alt">&#xE096;</string>
+    <string name="NEO_alt">&#xE096;</string>
 
-    <string name="NMC">&#xE097;</string>
+    <string name="NEO">&#xE097;</string>
 
-    <string name="NOTE_alt">&#xE098;</string>
+    <string name="NEOS_alt">&#xE098;</string>
 
-    <string name="NOTE">&#xE099;</string>
+    <string name="NEOS">&#xE099;</string>
 
-    <string name="NVC_alt">&#xE09A;</string>
+    <string name="NEU_alt">&#xE09A;</string>
 
-    <string name="NVC">&#xE09B;</string>
+    <string name="NEU">&#xE09B;</string>
 
-    <string name="NXT_alt">&#xE09C;</string>
+    <string name="NLG_alt">&#xE09C;</string>
 
-    <string name="NXT">&#xE09D;</string>
+    <string name="NLG">&#xE09D;</string>
 
-    <string name="OK_alt">&#xE09E;</string>
+    <string name="NMC_alt">&#xE09E;</string>
 
-    <string name="OK">&#xE09F;</string>
+    <string name="NMC">&#xE09F;</string>
 
-    <string name="OMG_alt">&#xE0A0;</string>
+    <string name="NOTE_alt">&#xE0A0;</string>
 
-    <string name="OMG">&#xE0A1;</string>
+    <string name="NOTE">&#xE0A1;</string>
 
-    <string name="OMNI_alt">&#xE0A2;</string>
+    <string name="NVC_alt">&#xE0A2;</string>
 
-    <string name="OMNI">&#xE0A3;</string>
+    <string name="NVC">&#xE0A3;</string>
 
-    <string name="OPAL_alt">&#xE0A4;</string>
+    <string name="NXT_alt">&#xE0A4;</string>
 
-    <string name="OPAL">&#xE0A5;</string>
+    <string name="NXT">&#xE0A5;</string>
 
-    <string name="PART_alt">&#xE0A6;</string>
+    <string name="OK_alt">&#xE0A6;</string>
 
-    <string name="PART">&#xE0A7;</string>
+    <string name="OK">&#xE0A7;</string>
 
-    <string name="PIGGY_alt">&#xE0A8;</string>
+    <string name="OMG_alt">&#xE0A8;</string>
 
-    <string name="PIGGY">&#xE0A9;</string>
+    <string name="OMG">&#xE0A9;</string>
 
-    <string name="PINK_alt">&#xE0AA;</string>
+    <string name="OMNI_alt">&#xE0AA;</string>
 
-    <string name="PINK">&#xE0AB;</string>
+    <string name="OMNI">&#xE0AB;</string>
 
-    <string name="PIVX_alt">&#xE0AC;</string>
+    <string name="OPAL_alt">&#xE0AC;</string>
 
-    <string name="PIVX">&#xE0AD;</string>
+    <string name="OPAL">&#xE0AD;</string>
 
-    <string name="POT_alt">&#xE0AE;</string>
+    <string name="PART_alt">&#xE0AE;</string>
 
-    <string name="POT">&#xE0AF;</string>
+    <string name="PART">&#xE0AF;</string>
 
-    <string name="PPC_alt">&#xE0B0;</string>
+    <string name="PIGGY_alt">&#xE0B0;</string>
 
-    <string name="PPC">&#xE0B1;</string>
+    <string name="PIGGY">&#xE0B1;</string>
 
-    <string name="QRK_alt">&#xE0B2;</string>
+    <string name="PINK_alt">&#xE0B2;</string>
 
-    <string name="QRK">&#xE0B3;</string>
+    <string name="PINK">&#xE0B3;</string>
 
-    <string name="RADS_alt">&#xE0B4;</string>
+    <string name="PIVX_alt">&#xE0B4;</string>
 
-    <string name="RADS">&#xE0B5;</string>
+    <string name="PIVX">&#xE0B5;</string>
 
-    <string name="RBIES_alt">&#xE0B6;</string>
+    <string name="POT_alt">&#xE0B6;</string>
 
-    <string name="RBIES">&#xE0B7;</string>
+    <string name="POT">&#xE0B7;</string>
 
-    <string name="RBT_alt">&#xE0B8;</string>
+    <string name="PPC_alt">&#xE0B8;</string>
 
-    <string name="RBT">&#xE0B9;</string>
+    <string name="PPC">&#xE0B9;</string>
 
-    <string name="RBY_alt">&#xE0BA;</string>
+    <string name="QRK_alt">&#xE0BA;</string>
 
-    <string name="RBY">&#xE0BB;</string>
+    <string name="QRK">&#xE0BB;</string>
 
-    <string name="RDD_alt">&#xE0BC;</string>
+    <string name="QTUM_alt">&#xE0BC;</string>
 
-    <string name="RDD">&#xE0BD;</string>
+    <string name="QTUM">&#xE0BD;</string>
 
-    <string name="REP_alt">&#xE0BE;</string>
+    <string name="RADS_alt">&#xE0BE;</string>
 
-    <string name="REP">&#xE0BF;</string>
+    <string name="RADS">&#xE0BF;</string>
 
-    <string name="RISE_alt">&#xE0C0;</string>
+    <string name="RBIES_alt">&#xE0C0;</string>
 
-    <string name="RISE">&#xE0C1;</string>
+    <string name="RBIES">&#xE0C1;</string>
 
-    <string name="SAR_alt">&#xE0C2;</string>
+    <string name="RBT_alt">&#xE0C2;</string>
 
-    <string name="SAR">&#xE0C3;</string>
+    <string name="RBT">&#xE0C3;</string>
 
-    <string name="SCOT_alt">&#xE0C4;</string>
+    <string name="RBY_alt">&#xE0C4;</string>
 
-    <string name="SCOT">&#xE0C5;</string>
+    <string name="RBY">&#xE0C5;</string>
 
-    <string name="SDC_alt">&#xE0C6;</string>
+    <string name="RDD_alt">&#xE0C6;</string>
 
-    <string name="SDC">&#xE0C7;</string>
+    <string name="RDD">&#xE0C7;</string>
 
-    <string name="SIA_alt">&#xE0C8;</string>
+    <string name="REP_alt">&#xE0C8;</string>
 
-    <string name="SIA">&#xE0C9;</string>
+    <string name="REP">&#xE0C9;</string>
 
-    <string name="SJCX_alt">&#xE0CA;</string>
+    <string name="RISE_alt">&#xE0CA;</string>
 
-    <string name="SJCX">&#xE0CB;</string>
+    <string name="RISE">&#xE0CB;</string>
 
-    <string name="SLG_alt">&#xE0CC;</string>
+    <string name="SALT_alt">&#xE0CC;</string>
 
-    <string name="SLG">&#xE0CD;</string>
+    <string name="SALT">&#xE0CD;</string>
 
-    <string name="SLS_alt">&#xE0CE;</string>
+    <string name="SAR_alt">&#xE0CE;</string>
 
-    <string name="SLS">&#xE0CF;</string>
+    <string name="SAR">&#xE0CF;</string>
 
-    <string name="SNRG_alt">&#xE0D0;</string>
+    <string name="SCOT_alt">&#xE0D0;</string>
 
-    <string name="SNRG">&#xE0D1;</string>
+    <string name="SCOT">&#xE0D1;</string>
 
-    <string name="START_alt">&#xE0D2;</string>
+    <string name="SDC_alt">&#xE0D2;</string>
 
-    <string name="START">&#xE0D3;</string>
+    <string name="SDC">&#xE0D3;</string>
 
-    <string name="STEEM_alt">&#xE0D4;</string>
+    <string name="SIA_alt">&#xE0D4;</string>
 
-    <string name="STEEM">&#xE0D5;</string>
+    <string name="SIA">&#xE0D5;</string>
 
-    <string name="STR_alt">&#xE0D6;</string>
+    <string name="SJCX_alt">&#xE0D6;</string>
 
-    <string name="STR">&#xE0D7;</string>
+    <string name="SJCX">&#xE0D7;</string>
 
-    <string name="STRAT_alt">&#xE0D8;</string>
+    <string name="SLG_alt">&#xE0D8;</string>
 
-    <string name="STRAT">&#xE0D9;</string>
+    <string name="SLG">&#xE0D9;</string>
 
-    <string name="SWIFT_alt">&#xE0DA;</string>
+    <string name="SLS_alt">&#xE0DA;</string>
 
-    <string name="SWIFT">&#xE0DB;</string>
+    <string name="SLS">&#xE0DB;</string>
 
-    <string name="SYNC_alt">&#xE0DC;</string>
+    <string name="SNRG_alt">&#xE0DC;</string>
 
-    <string name="SYNC">&#xE0DD;</string>
+    <string name="SNRG">&#xE0DD;</string>
 
-    <string name="SYS_alt">&#xE0DE;</string>
+    <string name="START_alt">&#xE0DE;</string>
 
-    <string name="SYS">&#xE0DF;</string>
+    <string name="START">&#xE0DF;</string>
 
-    <string name="TRIG_alt">&#xE0E0;</string>
+    <string name="STEEM_alt">&#xE0E0;</string>
 
-    <string name="TRIG">&#xE0E1;</string>
+    <string name="STEEM">&#xE0E1;</string>
 
-    <string name="TX_alt">&#xE0E2;</string>
+    <string name="STR_alt">&#xE0E2;</string>
 
-    <string name="TX">&#xE0E3;</string>
+    <string name="STR">&#xE0E3;</string>
 
-    <string name="UBQ_alt">&#xE0E4;</string>
+    <string name="STRAT_alt">&#xE0E4;</string>
 
-    <string name="UBQ">&#xE0E5;</string>
+    <string name="STRAT">&#xE0E5;</string>
 
-    <string name="UNITY_alt">&#xE0E6;</string>
+    <string name="SWIFT_alt">&#xE0E6;</string>
 
-    <string name="UNITY">&#xE0E7;</string>
+    <string name="SWIFT">&#xE0E7;</string>
 
-    <string name="USDT_alt">&#xE0E8;</string>
+    <string name="SYNC_alt">&#xE0E8;</string>
 
-    <string name="USDT">&#xE0E9;</string>
+    <string name="SYNC">&#xE0E9;</string>
 
-    <string name="VIOR_alt">&#xE0EA;</string>
+    <string name="SYS_alt">&#xE0EA;</string>
 
-    <string name="VIOR">&#xE0EB;</string>
+    <string name="SYS">&#xE0EB;</string>
 
-    <string name="VNL_alt">&#xE0EC;</string>
+    <string name="TRIG_alt">&#xE0EC;</string>
 
-    <string name="VNL">&#xE0ED;</string>
+    <string name="TRIG">&#xE0ED;</string>
 
-    <string name="VPN_alt">&#xE0EE;</string>
+    <string name="TX_alt">&#xE0EE;</string>
 
-    <string name="VPN">&#xE0EF;</string>
+    <string name="TX">&#xE0EF;</string>
 
-    <string name="VRC_alt">&#xE0F0;</string>
+    <string name="UBQ_alt">&#xE0F0;</string>
 
-    <string name="VRC">&#xE0F1;</string>
+    <string name="UBQ">&#xE0F1;</string>
 
-    <string name="VTC_alt">&#xE0F2;</string>
+    <string name="UNITY_alt">&#xE0F2;</string>
 
-    <string name="VTC">&#xE0F3;</string>
+    <string name="UNITY">&#xE0F3;</string>
 
-    <string name="WAVES_alt">&#xE0F4;</string>
+    <string name="USDT_alt">&#xE0F4;</string>
 
-    <string name="WAVES">&#xE0F5;</string>
+    <string name="USDT">&#xE0F5;</string>
 
-    <string name="XAI_alt">&#xE0F6;</string>
+    <string name="VIOR_alt">&#xE0F6;</string>
 
-    <string name="XAI">&#xE0F7;</string>
+    <string name="VIOR">&#xE0F7;</string>
 
-    <string name="XBS_alt">&#xE0F8;</string>
+    <string name="VNL_alt">&#xE0F8;</string>
 
-    <string name="XBS">&#xE0F9;</string>
+    <string name="VNL">&#xE0F9;</string>
 
-    <string name="XCP_alt">&#xE0FA;</string>
+    <string name="VPN_alt">&#xE0FA;</string>
 
-    <string name="XCP">&#xE0FB;</string>
+    <string name="VPN">&#xE0FB;</string>
 
-    <string name="XEM_alt">&#xE0FC;</string>
+    <string name="VRC_alt">&#xE0FC;</string>
 
-    <string name="XEM">&#xE0FD;</string>
+    <string name="VRC">&#xE0FD;</string>
 
-    <string name="XMR">&#xE0FE;</string>
+    <string name="VTC_alt">&#xE0FE;</string>
 
-    <string name="XPM_alt">&#xE0FF;</string>
+    <string name="VTC">&#xE0FF;</string>
 
-    <string name="XPM">&#xE100;</string>
+    <string name="WAVES_alt">&#xE100;</string>
 
-    <string name="XRP_alt">&#xE101;</string>
+    <string name="WAVES">&#xE101;</string>
 
-    <string name="XRP">&#xE102;</string>
+    <string name="XAI_alt">&#xE102;</string>
 
-    <string name="XTZ_alt">&#xE103;</string>
+    <string name="XAI">&#xE103;</string>
 
-    <string name="XTZ">&#xE104;</string>
+    <string name="XBS_alt">&#xE104;</string>
 
-    <string name="XVG_alt">&#xE105;</string>
+    <string name="XBS">&#xE105;</string>
 
-    <string name="XVG">&#xE106;</string>
+    <string name="XCP_alt">&#xE106;</string>
 
-    <string name="YBC_alt">&#xE107;</string>
+    <string name="XCP">&#xE107;</string>
 
-    <string name="YBC">&#xE108;</string>
+    <string name="XEM_alt">&#xE108;</string>
 
-    <string name="ZEC_alt">&#xE109;</string>
+    <string name="XEM">&#xE109;</string>
 
-    <string name="ZEC">&#xE10A;</string>
+    <string name="XMR">&#xE10A;</string>
 
-    <string name="ZEIT_alt">&#xE10B;</string>
+    <string name="XPM_alt">&#xE10B;</string>
 
-    <string name="ZEIT">&#xE10C;</string>
+    <string name="XPM">&#xE10C;</string>
+
+    <string name="XRP_alt">&#xE10D;</string>
+
+    <string name="XRP">&#xE10E;</string>
+
+    <string name="XTZ_alt">&#xE10F;</string>
+
+    <string name="XTZ">&#xE110;</string>
+
+    <string name="XVG_alt">&#xE111;</string>
+
+    <string name="XVG">&#xE112;</string>
+
+    <string name="XZC_alt">&#xE113;</string>
+
+    <string name="XZC">&#xE114;</string>
+
+    <string name="YBC_alt">&#xE115;</string>
+
+    <string name="YBC">&#xE116;</string>
+
+    <string name="ZEC_alt">&#xE117;</string>
+
+    <string name="ZEC">&#xE118;</string>
+
+    <string name="ZEIT_alt">&#xE119;</string>
+
+    <string name="ZEIT">&#xE11A;</string>
 </resources>

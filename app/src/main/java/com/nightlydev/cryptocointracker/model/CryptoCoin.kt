@@ -1,5 +1,7 @@
 package com.nightlydev.cryptocointracker.model
 
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.PrimaryKey
 import android.content.Context
 import com.nightlydev.cryptocointracker.R
 import java.io.Serializable
@@ -42,17 +44,19 @@ import java.io.Serializable
  * @author edu (edusevilla90@gmail.com)
  * @since 5-12-17
 */
-data class CryptoCoin(val id: String,
-                      val name: String,
-                      val symbol: String,
-                      val rank: Int,
-                      val price_usd: Double,
-                      val _24h_volume_usd: Double,
-                      val market_cap_usd: Double,
-                      val available_supply: Double,
-                      val total_supply: Double,
-                      val percent_change_1h: Double,
-                      val percent_change_24h: Double,
-                      val percent_change_7d: Double,
-                      val last_updated: Long,
-                      val price_eur: Double) : Serializable
+@Entity
+data class CryptoCoin(@PrimaryKey
+                      var id: String = "",
+                      var name: String = "",
+                      var symbol: String = "",
+                      var rank: Int = 0,
+                      var price_usd: Double = 0.0,
+                      var _24h_volume_usd: Double = 0.0,
+                      var market_cap_usd: Double = 0.0,
+                      var available_supply: Double = 0.0,
+                      var total_supply: Double = 0.0,
+                      var percent_change_1h: Double = 0.0,
+                      var percent_change_24h: Double = 0.0,
+                      var percent_change_7d: Double = 0.0,
+                      var last_updated: Long = 0L,
+                      var price_eur: Double = 0.0) : Serializable

@@ -3,24 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
     <com.nightlydev.cryptocointracker.ui.CryptoCoinIcon
         android:id="@+id/tv_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/default_padding"
         android:textSize="48sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@string/BCN" />
+        tools:textColor="@color/BTC"
+        tools:text="@string/BTC" />
 
     <TextView
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="@dimen/default_padding"
+        android:layout_marginTop="26dp"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@id/tv_icon"
@@ -31,7 +32,7 @@
         android:id="@+id/tv_price_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/default_padding"
         style="@style/CoinDataTextView"
         android:text="@string/label_price"
         app:layout_constraintStart_toStartOf="@id/tv_icon"
@@ -43,98 +44,103 @@
         android:layout_height="wrap_content"
         android:textStyle="bold"
         style="@style/CoinDataTextView"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="@dimen/default_half_padding"
         app:layout_constraintBottom_toBottomOf="@+id/tv_price_label"
         app:layout_constraintStart_toEndOf="@+id/tv_price_label"
         tools:text="$ 11971.5" />
 
     <TextView
         android:id="@+id/tv_market_cap_label"
+        style="@style/CoinDataTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/CoinDataTextView"
-        app:layout_constraintTop_toBottomOf="@id/tv_price_label"
-        android:text="@string/label_market_cap"/>
+        android:text="@string/label_market_cap"
+        app:layout_constraintStart_toStartOf="@+id/tv_price_label"
+        app:layout_constraintTop_toBottomOf="@id/tv_price_label" />
 
     <TextView
         android:id="@+id/tv_market_cap"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/CoinDataTextView"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="@dimen/default_half_padding"
         app:layout_constraintStart_toEndOf="@id/tv_market_cap_label"
         app:layout_constraintBottom_toBottomOf="@id/tv_market_cap_label"
         tools:text="$ 11971.5"/>
 
     <TextView
         android:id="@+id/tv_total_supply_label"
+        style="@style/CoinDataTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/CoinDataTextView"
-        app:layout_constraintTop_toBottomOf="@id/tv_market_cap_label"
-        android:text="@string/label_total_supply"/>
+        android:text="@string/label_total_supply"
+        app:layout_constraintStart_toStartOf="@+id/tv_market_cap_label"
+        app:layout_constraintTop_toBottomOf="@id/tv_market_cap_label" />
 
     <TextView
         android:id="@+id/tv_total_supply"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/CoinDataTextView"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="@dimen/default_half_padding"
         app:layout_constraintStart_toEndOf="@id/tv_total_supply_label"
         app:layout_constraintBottom_toBottomOf="@id/tv_total_supply_label"
         tools:text="$ 11971.5"/>
 
     <TextView
         android:id="@+id/tv_percent_change_1h_label"
+        style="@style/CoinDataTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        style="@style/CoinDataTextView"
-        app:layout_constraintTop_toBottomOf="@id/tv_total_supply_label"
-        android:text="@string/label_percent_change_1_hour"/>
+        android:text="@string/label_percent_change_1_hour"
+        app:layout_constraintStart_toStartOf="@+id/tv_total_supply_label"
+        app:layout_constraintTop_toBottomOf="@id/tv_total_supply_label" />
 
     <TextView
         android:id="@+id/tv_percent_change_1h"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_half_padding"
         style="@style/CoinDataTextView"
-        android:layout_marginStart="8dp"
         app:layout_constraintStart_toEndOf="@id/tv_percent_change_1h_label"
         app:layout_constraintBottom_toBottomOf="@id/tv_percent_change_1h_label"
         tools:text="2.59%"/>
 
     <TextView
         android:id="@+id/tv_percent_change_24h_label"
+        style="@style/CoinDataTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/CoinDataTextView"
-        app:layout_constraintTop_toBottomOf="@id/tv_percent_change_1h_label"
-        android:text="@string/label_percent_change_24_hour"/>
+        android:text="@string/label_percent_change_24_hour"
+        app:layout_constraintStart_toStartOf="@+id/tv_percent_change_1h_label"
+        app:layout_constraintTop_toBottomOf="@id/tv_percent_change_1h_label" />
 
     <TextView
         android:id="@+id/tv_percent_change_24h"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/CoinDataTextView"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="@dimen/default_half_padding"
         app:layout_constraintStart_toEndOf="@id/tv_percent_change_24h_label"
         app:layout_constraintBottom_toBottomOf="@id/tv_percent_change_24h_label"
         tools:text="2.59%"/>
 
     <TextView
         android:id="@+id/tv_percent_change_7d_label"
+        style="@style/CoinDataTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/CoinDataTextView"
-        app:layout_constraintTop_toBottomOf="@id/tv_percent_change_24h_label"
-        android:text="@string/label_percent_change_7_days"/>
+        android:text="@string/label_percent_change_7_days"
+        app:layout_constraintStart_toStartOf="@+id/tv_percent_change_24h_label"
+        app:layout_constraintTop_toBottomOf="@id/tv_percent_change_24h_label" />
 
     <TextView
         android:id="@+id/tv_percent_change_7d"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/CoinDataTextView"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="@dimen/default_half_padding"
         app:layout_constraintStart_toEndOf="@id/tv_percent_change_7d_label"
         app:layout_constraintBottom_toBottomOf="@id/tv_percent_change_7d_label"
         tools:text="2.59%"/>
@@ -142,8 +148,11 @@
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_padding"
+        app:layout_constraintTop_toBottomOf="@id/tv_percent_change_7d_label"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="24dp">
+        android:layout_marginBottom="24dp"
+        android:background="@color/white">
 
         <ProgressBar
             android:id="@+id/progress_bar"
@@ -156,7 +165,7 @@
     <com.jjoe64.graphview.GraphView
         android:id="@+id/graph_view_history"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="250dp"
         android:visibility="invisible"
         tools:visibility="visible"/>
 

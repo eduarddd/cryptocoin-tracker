@@ -42,10 +42,12 @@ fun CryptoCoin.iconColor(context: Context): Int {
 }
 
 fun CryptoCoin.iconString(context: Context): String {
-    var iconRestId = context.resources.getIdentifier(symbol, "string", context.packageName)
+    var iconSymbol = symbol
+    var iconRestId = context.resources.getIdentifier(iconSymbol, "string", context.packageName)
 
     if (iconRestId <= 0) {
-        iconRestId = context.resources.getIdentifier(name, "string", context.packageName)
+        iconSymbol += "_alt"
+        iconRestId = context.resources.getIdentifier(iconSymbol, "string", context.packageName)
     }
     if (iconRestId > 0) {
         return context.getString(iconRestId)

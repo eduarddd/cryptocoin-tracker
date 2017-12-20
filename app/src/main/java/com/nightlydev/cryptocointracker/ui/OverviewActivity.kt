@@ -5,9 +5,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
+import com.nightlydev.cryptocointracker.App
 import com.nightlydev.cryptocointracker.data.CryptoCoinRepository
 import com.nightlydev.cryptocointracker.R
 import com.nightlydev.cryptocointracker.model.CryptoCoin
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_overview.*
@@ -18,7 +20,8 @@ import kotlinx.android.synthetic.main.activity_overview.*
  */
 class OverviewActivity : Activity(), SwipeRefreshLayout.OnRefreshListener, CryptoCoinsAdapter.OnClickHandler {
 
-    private lateinit var mAdapter: CryptoCoinsAdapter
+    private lateinit var mAdapter : CryptoCoinsAdapter
+    val cryptoCoinRepository = CryptoCoinRepository()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,17 +58,24 @@ class OverviewActivity : Activity(), SwipeRefreshLayout.OnRefreshListener, Crypt
     }
 
     private fun fetchCryptoCoinsList() {
-        val repository = CryptoCoinRepository()
-        repository.listCryptoCoins()
+        cryptoCoinRepository.listCryptoCoins()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({
-                    result -> mAdapter.setItems(result)
+                    result ->
+                    saveCryptoCoins(result)
                     swipe_refresh_layout.isRefreshing = false
                 }, {
-                    error -> error.printStackTrace()
+                    error ->
+                    //error.printStackTrace()
                     swipe_refresh_layout.isRefreshing = false
                 })
+    }
+
+    private fun saveCryptoCoins(cryptoCoinList: List<CryptoCoin>) {
+        Single.fromCallable {
+            App.cryptoCoinDatabase?.cryptoCoinDao()?.insertAll(cryptoCoinList)
+        }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe()
     }
 
     private fun startCryptoCoinDetailActivity(cryptoCoin: CryptoCoin) {

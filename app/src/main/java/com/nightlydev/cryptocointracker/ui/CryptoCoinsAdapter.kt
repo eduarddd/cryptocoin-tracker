@@ -6,8 +6,11 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.nightlydev.cryptocointracker.App
 import com.nightlydev.cryptocointracker.R
 import com.nightlydev.cryptocointracker.model.CryptoCoin
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.item_crypto_coin.view.*
 import java.text.NumberFormat
 
@@ -15,13 +18,15 @@ import java.text.NumberFormat
  * @author edu (edusevilla90@gmail.com)
  * @since 5-12-17
  */
-class CryptoCoinsAdapter(clickHandler: OnClickHandler) : RecyclerView.Adapter<CryptoCoinsAdapter.CryptoCoinViewHolder>() {
+class CryptoCoinsAdapter(clickHandler: OnClickHandler)
+    : RecyclerView.Adapter<CryptoCoinsAdapter.CryptoCoinViewHolder>() {
 
     private var mItems: ArrayList<CryptoCoin>
     private var mClickHandler = clickHandler
 
     init {
         mItems = ArrayList()
+        registerCryptoCoinUpdateListener()
     }
 
     override fun getItemCount(): Int = mItems.size
@@ -38,6 +43,15 @@ class CryptoCoinsAdapter(clickHandler: OnClickHandler) : RecyclerView.Adapter<Cr
                 .inflate(R.layout.item_crypto_coin, parent, false)
 
         return CryptoCoinViewHolder(view)
+    }
+
+    private fun registerCryptoCoinUpdateListener() {
+        App.cryptoCoinDatabase?.cryptoCoinDao()?.getAllCryptoCoins()
+                ?.subscribeOn(Schedulers.io())
+                ?.observeOn(AndroidSchedulers.mainThread())
+                ?.subscribe { cryptoCoinList ->
+                    setItems(cryptoCoinList)
+                }
     }
 
     fun setItems(cryptoCoinList: List<CryptoCoin>) {

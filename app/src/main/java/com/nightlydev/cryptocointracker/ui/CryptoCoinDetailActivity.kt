@@ -32,6 +32,7 @@ class CryptoCoinDetailActivity: Activity() {
     }
 
     private lateinit var mCryptoCoin : CryptoCoin
+    private val cryptoCoinRepository = CryptoCoinRepository()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +49,7 @@ class CryptoCoinDetailActivity: Activity() {
 
     private fun fetchCryptoCoinHistory(dayCount: Int) {
         progress_bar.visibility = View.VISIBLE
-        CryptoCoinRepository().listCryptoCoinHistory(dayCount, mCryptoCoin.symbol)
+        cryptoCoinRepository.listCryptoCoinHistory(dayCount, mCryptoCoin.symbol)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({
@@ -94,10 +95,6 @@ class CryptoCoinDetailActivity: Activity() {
                 setMaxX(maxX)
                 setMinY(minY)
                 setMaxY(maxY)
-                isScalable = true
-                isScrollable = true
-                setScalableY(true)
-                setScrollableY(true)
             }
             with(gridLabelRenderer) {
                 isHorizontalLabelsVisible = true
@@ -118,7 +115,7 @@ class CryptoCoinDetailActivity: Activity() {
         val numberFormat = NumberFormat.getNumberInstance()
         tv_price_usd.text = getString(R.string.price_usd_format, numberFormat.format(mCryptoCoin.price_usd))
         tv_market_cap.text = getString(R.string.price_usd_format, numberFormat.format(mCryptoCoin.market_cap_usd))
-        tv_total_supply.text = getString(R.string.price_usd_format, numberFormat.format(mCryptoCoin.total_supply))
+        tv_total_supply.text = numberFormat.format(mCryptoCoin.total_supply)
 
         bindPercentages()
     }

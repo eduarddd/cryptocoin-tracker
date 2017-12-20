@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="ADA">#3CC8C8</color>
     <color name="ADC">#3CB0E5</color>
     <color name="AEON">#164450</color>
     <color name="AMP">#048DD2</color>
     <color name="ANC">#000</color>
     <color name="ARCH">#002652</color>
     <color name="ARDR">#1162a1</color>
+    <color name="ARK">#F70000</color>
     <color name="AUR">#136c5e</color>
     <color name="BANX">#225BA6</color>
     <color name="BAT">#9e1f63</color>
@@ -20,6 +22,7 @@
     <color name="BTC">#F7931A</color>
     <color name="BCH">#F7931A</color>
     <color name="BTCD">#2A72DC</color>
+    <color name="BTM">#9FA8B4</color>
     <color name="BTS">#03A9E0</color>
     <color name="CLAM">#D6AB31</color>
     <color name="CLOAK">#DF3F1E</color>
@@ -43,6 +46,7 @@
     <color name="FRK">#0633cd</color>
     <color name="FTC">#679EF1</color>
     <color name="GAME">#ed1b24</color>
+    <color name="GBYTE">#2C3E50</color>
     <color name="GDC">#E9A226</color>
     <color name="GEMZ">#e86060</color>
     <color name="GLD">#E8BE24</color>
@@ -56,7 +60,7 @@
     <color name="IFC">#ed272d</color>
     <color name="INCNT">#f2932f</color>
     <color name="IOC">#2fa3de</color>
-    <color name="IOTA">#1A8BCD</color>
+    <color name="IOTA">#FFFFFF</color>
     <color name="JBS">#1A8BCD</color>
     <color name="KMD">#326464</color>
     <color name="KOBO">#80C342</color>
@@ -93,6 +97,7 @@
     <color name="POT">#105B2F</color>
     <color name="PPC">#3FA30C</color>
     <color name="QRK">#22AABF</color>
+    <color name="QTUM">#359BCE</color>
     <color name="RADS">#924cea</color>
     <color name="RBIES">#C62436</color>
     <color name="RBT">#0d4982</color>
@@ -100,6 +105,7 @@
     <color name="RDD">#ED1C24</color>
     <color name="REP">#40a2cb</color>
     <color name="RISE">#43CEA2</color>
+    <color name="SALT">#373C43</color>
     <color name="SAR">#1B72B8</color>
     <color name="SCOT">#3498DB</color>
     <color name="SDC">#981D2D</color>
@@ -135,6 +141,7 @@
     <color name="XRP">#346AA9</color>
     <color name="XTZ">#A6DF00</color>
     <color name="XVG">#42AFB2</color>
+    <color name="XZC">#23B852</color>
     <color name="YBC">#D6C154</color>
     <color name="ZEC">#e5a93d</color>
     <color name="ZEIT">#ACACAC</color>
