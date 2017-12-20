@@ -38,11 +38,11 @@ class CryptoCoinDetailActivity: Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_crypto_coin_detail)
 
-        mCryptoCoin = intent.getSerializableExtra(EXTRA_CRYPTO_COIN) as CryptoCoin
-
         title = ""
         actionBar.setDisplayHomeAsUpEnabled(true)
-        actionBar.setBackgroundDrawable(ColorDrawable(mCryptoCoin.iconColor(this)))
+
+        mCryptoCoin = intent.getSerializableExtra(EXTRA_CRYPTO_COIN) as CryptoCoin
+
         bindCoinData()
         fetchCryptoCoinHistory(7)
     }
@@ -55,10 +55,12 @@ class CryptoCoinDetailActivity: Activity() {
                 .subscribe({
                     result ->
                         progress_bar.visibility = View.GONE
+                        tv_history_error.visibility = View.GONE
                         displayPriceHistoryInfo(result.priceHistory())
                 }, {
                     error ->
                         progress_bar.visibility = View.GONE
+                        tv_history_error.visibility = View.VISIBLE
                         error.printStackTrace()
                 })
     }
@@ -109,8 +111,12 @@ class CryptoCoinDetailActivity: Activity() {
     }
 
     private fun bindCoinData() {
-        tv_icon.setCoin(mCryptoCoin)
-        tv_name.text = getString(R.string.cryptocoin_name_format, mCryptoCoin.name, mCryptoCoin.symbol)
+        val color = mCryptoCoin.iconColor(this)
+        actionBar.setBackgroundDrawable(ColorDrawable(color))
+        val alpha = 180
+        window.statusBarColor = color and 0x00ffffff or (alpha shl 24)
+
+        title = getString(R.string.cryptocoin_name_format, mCryptoCoin.name, mCryptoCoin.symbol)
 
         val numberFormat = NumberFormat.getNumberInstance()
         tv_price_usd.text = getString(R.string.price_usd_format, numberFormat.format(mCryptoCoin.price_usd))

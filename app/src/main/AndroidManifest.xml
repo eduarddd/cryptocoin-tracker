@@ -19,8 +19,10 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.CryptoCoinDetailActivity"
-            android:parentActivityName=".ui.OverviewActivity"/>
-    </application>
 
+        <activity android:name=".ui.CryptoCoinDetailActivity"
+            android:parentActivityName=".ui.OverviewActivity"
+            android:label=""/>
+
+    </application>
 </manifest>

@@ -6,11 +6,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.nightlydev.cryptocointracker.App
 import com.nightlydev.cryptocointracker.R
 import com.nightlydev.cryptocointracker.model.CryptoCoin
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.item_crypto_coin.view.*
 import java.text.NumberFormat
 
@@ -21,18 +18,14 @@ import java.text.NumberFormat
 class CryptoCoinsAdapter(clickHandler: OnClickHandler)
     : RecyclerView.Adapter<CryptoCoinsAdapter.CryptoCoinViewHolder>() {
 
-    private var mItems: ArrayList<CryptoCoin>
+    private var mItems = ArrayList<CryptoCoin>()
+    private var mFilteredItems = ArrayList<CryptoCoin>()
     private var mClickHandler = clickHandler
 
-    init {
-        mItems = ArrayList()
-        registerCryptoCoinUpdateListener()
-    }
-
-    override fun getItemCount(): Int = mItems.size
+    override fun getItemCount(): Int = mFilteredItems.size
 
     override fun onBindViewHolder(holder: CryptoCoinViewHolder, position: Int) {
-        val coin = mItems[position]
+        val coin = mFilteredItems[position]
         holder.resetViews()
         holder.bindCryptoCoin(coin)
     }
@@ -45,17 +38,25 @@ class CryptoCoinsAdapter(clickHandler: OnClickHandler)
         return CryptoCoinViewHolder(view)
     }
 
-    private fun registerCryptoCoinUpdateListener() {
-        App.cryptoCoinDatabase?.cryptoCoinDao()?.getAllCryptoCoins()
-                ?.subscribeOn(Schedulers.io())
-                ?.observeOn(AndroidSchedulers.mainThread())
-                ?.subscribe { cryptoCoinList ->
-                    setItems(cryptoCoinList)
-                }
-    }
-
     fun setItems(cryptoCoinList: List<CryptoCoin>) {
         mItems = ArrayList(cryptoCoinList)
+        mFilteredItems = ArrayList(cryptoCoinList)
+        notifyDataSetChanged()
+    }
+
+    fun filter(filter: String?) {
+        if (filter == null || filter == "") {
+            mFilteredItems = ArrayList(mItems)
+            notifyDataSetChanged()
+            return
+        }
+        mFilteredItems.clear()
+        for (cryptoCoin in mItems) {
+            if (cryptoCoin.symbol.contains(filter, true)
+                    || cryptoCoin.name.contains(filter, true)) {
+                mFilteredItems.add(cryptoCoin)
+            }
+        }
         notifyDataSetChanged()
     }
 
