@@ -11,7 +11,6 @@ import io.reactivex.Observable
 class CryptoCoinRepository {
 
     private val cryptoCoinService: CryptoCoinService = CryptoCoinService.create()
-    private val cryptoCoinHistoryService: CryptoCoinHistoryService = CryptoCoinHistoryService.create()
 
     fun listCryptoCoins(): Observable<List<CryptoCoin>> {
         return cryptoCoinService.listCryptoCoins()
@@ -19,6 +18,6 @@ class CryptoCoinRepository {
 
     fun listCryptoCoinHistory(dayCount: Int,
                               coinSymbol: String): Observable<CryptoCoinHistoryResponse> {
-        return cryptoCoinHistoryService.listCryptoCoinHistory(dayCount, coinSymbol)
+        return cryptoCoinService.listCryptoCoinHistory(dayCount, coinSymbol)
     }
 }

@@ -12,7 +12,7 @@ import io.reactivex.Flowable
  * @since 20-12-17
  */
 @Dao interface CryptoCoinDao {
-    @Query("SELECT * FROM cryptoCoin ORDER BY rank")
+    @Query("SELECT * FROM cryptoCoin")
     fun getAllCryptoCoins(): Flowable<List<CryptoCoin>>
 
     @Insert

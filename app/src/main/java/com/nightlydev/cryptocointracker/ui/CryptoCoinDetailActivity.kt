@@ -49,7 +49,7 @@ class CryptoCoinDetailActivity: Activity() {
 
     private fun fetchCryptoCoinHistory(dayCount: Int) {
         progress_bar.visibility = View.VISIBLE
-        cryptoCoinRepository.listCryptoCoinHistory(dayCount, mCryptoCoin.symbol)
+        cryptoCoinRepository.listCryptoCoinHistory(dayCount, mCryptoCoin.short)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({
@@ -100,7 +100,7 @@ class CryptoCoinDetailActivity: Activity() {
             }
             with(gridLabelRenderer) {
                 isHorizontalLabelsVisible = true
-                isVerticalLabelsVisible = true
+                isVerticalLabelsVisible = false
                 setPadding(0, 0, 0 , 8)
                 labelFormatter = DateAsXAxisLabelFormatter(
                         context,
@@ -116,20 +116,20 @@ class CryptoCoinDetailActivity: Activity() {
         val alpha = 180
         window.statusBarColor = color and 0x00ffffff or (alpha shl 24)
 
-        title = getString(R.string.cryptocoin_name_format, mCryptoCoin.name, mCryptoCoin.symbol)
+        title = getString(R.string.cryptocoin_name_format, mCryptoCoin.long, mCryptoCoin.short)
 
         val numberFormat = NumberFormat.getNumberInstance()
-        tv_price_usd.text = getString(R.string.price_usd_format, numberFormat.format(mCryptoCoin.price_usd))
-        tv_market_cap.text = getString(R.string.price_usd_format, numberFormat.format(mCryptoCoin.market_cap_usd))
-        tv_total_supply.text = numberFormat.format(mCryptoCoin.total_supply)
+        tv_price_usd.text = getString(R.string.price_usd_format, numberFormat.format(mCryptoCoin.price))
+        val marketCapText = getString(R.string.price_usd_format, numberFormat.format(mCryptoCoin.mktcap))
+        tv_market_cap.text = getString(R.string.label_market_cap, marketCapText)
+        val supplyText = numberFormat.format(mCryptoCoin.supply)
+        tv_total_supply.text = getString(R.string.label_total_supply, supplyText)
 
         bindPercentages()
     }
 
     private fun bindPercentages() {
-        bindPercentage(mCryptoCoin.percent_change_1h, tv_percent_change_1h)
-        bindPercentage(mCryptoCoin.percent_change_24h, tv_percent_change_24h)
-        bindPercentage(mCryptoCoin.percent_change_7d, tv_percent_change_7d)
+        bindPercentage(mCryptoCoin.cap24hrChange, tv_percent_change_24h)
     }
 
     private fun bindPercentage(percentage: Double, percentageTextView: TextView) {
@@ -141,7 +141,12 @@ class CryptoCoinDetailActivity: Activity() {
         } else {
             percentageTextView.setTextColor(red)
         }
-        percentageTextView.text = NumberFormat.getNumberInstance().format(percentage) + "%"
+        var formattedPercentage = NumberFormat.getNumberInstance().format(percentage)
+
+        if (percentage > 0) {
+            formattedPercentage = "+" + formattedPercentage
+        }
+        percentageTextView.text = getString(R.string.perc_change_format, formattedPercentage)
     }
 
 }

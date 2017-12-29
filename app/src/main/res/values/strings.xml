@@ -6,11 +6,12 @@
     <string name="percentage">%.2f</string>
 
     <string name="label_price">Current price: </string>
-    <string name="label_market_cap">Market cap: </string>
-    <string name="label_total_supply">Total supply: </string>
-    <string name="label_percent_change_1_hour">Percent change(1H): </string>
-    <string name="label_percent_change_24_hour">Percent change(24H): </string>
-    <string name="label_percent_change_7_days">Percent change(7d): </string>
+    <string name="label_market_cap">Market cap: %1$s</string>
+    <string name="label_total_supply">Total supply: %1$s</string>
+    <string name="perc_change_format">%1$s%% (24h)</string>
+
+
+    <string name="error_history_not_available">History not available</string>
 
     <string name="close">Close</string>
 
