@@ -25,7 +25,7 @@ import java.util.*
  * @author edu (edusevilla90@gmail.com)
  * @since 15-12-17
  */
-class CryptoCoinDetailActivity: Activity() {
+class CryptoCoinDetailActivity: Activity(), View.OnClickListener {
     companion object {
         val EXTRA_CRYPTO_COIN = "CRYPTO_COIN"
         val ALPHA = 40
@@ -43,8 +43,44 @@ class CryptoCoinDetailActivity: Activity() {
 
         mCryptoCoin = intent.getSerializableExtra(EXTRA_CRYPTO_COIN) as CryptoCoin
 
+        initButtons()
         bindCoinData()
-        fetchCryptoCoinHistory(7)
+        fetchCryptoCoinHistory(1)
+        bt_one_day.setTextColor(ContextCompat.getColor(this, R.color.white))
+    }
+
+    private fun initButtons() {
+        bt_one_day.setOnClickListener(this)
+        bt_one_month.setOnClickListener(this)
+        bt_one_week.setOnClickListener(this)
+        bt_three_month.setOnClickListener(this)
+        bt_six_month.setOnClickListener(this)
+        bt_one_year.setOnClickListener(this)
+        bt_all.setOnClickListener(this)
+    }
+
+    override fun onClick(v : View?) {
+        when(v?.id) {
+            R.id.bt_one_day -> fetchCryptoCoinHistory(1)
+            R.id.bt_one_week -> fetchCryptoCoinHistory(7)
+            R.id.bt_one_month -> fetchCryptoCoinHistory(30)
+            R.id.bt_three_month -> fetchCryptoCoinHistory(90)
+            R.id.bt_six_month -> fetchCryptoCoinHistory(180)
+            R.id.bt_one_year -> fetchCryptoCoinHistory(365)
+            R.id.bt_all -> fetchCryptoCoinHistory(0)
+        }
+        updateButtonColors(v)
+    }
+
+    private fun updateButtonColors(v : View?) {
+        bt_one_day.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
+        bt_one_month.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
+        bt_one_week.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
+        bt_three_month.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
+        bt_six_month.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
+        bt_one_year.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
+        bt_all.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
+        (v as TextView).setTextColor(ContextCompat.getColor(this, R.color.white))
     }
 
     private fun fetchCryptoCoinHistory(dayCount: Int) {
@@ -89,6 +125,7 @@ class CryptoCoinDetailActivity: Activity() {
         series.thickness = 4
 
         with(graph_view_history) {
+            removeAllSeries()
             addSeries(series)
             with(viewport) {
                 isXAxisBoundsManual = true

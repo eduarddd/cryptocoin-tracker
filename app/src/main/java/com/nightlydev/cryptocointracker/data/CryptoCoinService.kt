@@ -23,6 +23,10 @@ interface CryptoCoinService {
                               @Path("coin_symbol") coinSymbol: String
     ): Observable<CryptoCoinHistoryResponse>
 
+    @GET("history/{coin_symbol}")
+    fun listCryptoCoinHistory(@Path("coin_symbol") coinSymbol: String
+    ): Observable<CryptoCoinHistoryResponse>
+
     companion object Factory {
         fun create(): CryptoCoinService {
             val retrofit = Retrofit.Builder()

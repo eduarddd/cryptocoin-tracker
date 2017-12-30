@@ -18,6 +18,10 @@ class CryptoCoinRepository {
 
     fun listCryptoCoinHistory(dayCount: Int,
                               coinSymbol: String): Observable<CryptoCoinHistoryResponse> {
-        return cryptoCoinService.listCryptoCoinHistory(dayCount, coinSymbol)
+        return if (dayCount > 0) {
+            cryptoCoinService.listCryptoCoinHistory(dayCount, coinSymbol)
+        } else {
+            cryptoCoinService.listCryptoCoinHistory(coinSymbol)
+        }
     }
 }
