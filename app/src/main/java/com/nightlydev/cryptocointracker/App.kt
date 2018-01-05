@@ -20,7 +20,9 @@ class App : Application() {
                 .databaseBuilder(
                         this,
                         CryptoCoinDatabase::class.java,
-                        "cryptoCoin"
-                ).build()
+                        "crypto-coin"
+                )
+                .fallbackToDestructiveMigration()
+                .build()
     }
 }

@@ -37,14 +37,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/default_double_padding"
-        app:layout_constraintTop_toBottomOf="@id/tv_percent_change_24h">
+        app:layout_constraintBottom_toTopOf="@id/ll_period_selector">
 
         <com.jjoe64.graphview.GraphView
             android:id="@+id/graph_view_history"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="300dp"
             android:visibility="invisible"
             tools:visibility="visible"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            tools:text="11971.5"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            tools:text="971.5"/>
 
         <ProgressBar
             android:id="@+id/progress_bar"
@@ -72,8 +84,8 @@
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:orientation="horizontal"
-        android:background="@color/colorPrimaryDark"
-        app:layout_constraintTop_toBottomOf="@id/fl_history_container">
+        android:background="@color/period_bar"
+        app:layout_constraintBottom_toTopOf="parent">
 
         <TextView
             android:id="@+id/bt_one_day"
@@ -146,27 +158,5 @@
             android:text="ALL"/>
 
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/tv_market_cap"
-        style="@style/CoinDataTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="@dimen/default_padding"
-        android:layout_marginTop="@dimen/default_padding"
-        app:layout_constraintTop_toBottomOf="@id/ll_period_selector"
-        tools:text="Market cap: $ 11971.5" />
-
-    <TextView
-        android:id="@+id/tv_total_supply"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/CoinDataTextView"
-        app:layout_constraintStart_toStartOf="@+id/tv_market_cap"
-        app:layout_constraintTop_toBottomOf="@id/tv_market_cap"
-        tools:text="Total supply: 11971.5"/>
-
-
 
 </android.support.constraint.ConstraintLayout>

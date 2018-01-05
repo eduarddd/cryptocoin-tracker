@@ -1,0 +1,69 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "d7d39b293f5bfb695682837c833e56fa",
+    "entities": [
+      {
+        "tableName": "CryptoCoin",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `long` TEXT NOT NULL, `short` TEXT NOT NULL, `price` REAL NOT NULL, `mktcap` REAL NOT NULL, `supply` REAL NOT NULL, `cap24hrChange` REAL NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "long",
+            "columnName": "long",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "short",
+            "columnName": "short",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "price",
+            "columnName": "price",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mktcap",
+            "columnName": "mktcap",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "supply",
+            "columnName": "supply",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cap24hrChange",
+            "columnName": "cap24hrChange",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"d7d39b293f5bfb695682837c833e56fa\")"
+    ]
+  }
+}

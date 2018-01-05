@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3595D4</color>
-    <color name="colorPrimaryDark">#1573A7</color>
-    <color name="colorAccent">#3AC87D</color>
+    <color name="colorPrimary">#37ab2f</color>
+    <color name="colorPrimaryDark">#007b00</color>
+    <color name="colorPrimaryLight">#6fde5f</color>
+    <color name="colorAccent">#f5b000</color>
 
     <color name="green">#009f5d</color>
     <color name="red">#E2001A</color>
     <color name="white">#FFFFFF</color>
+    <color name="period_bar">#323232</color>
 </resources>

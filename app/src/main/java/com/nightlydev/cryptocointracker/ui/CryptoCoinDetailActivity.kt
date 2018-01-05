@@ -1,11 +1,11 @@
 package com.nightlydev.cryptocointracker.ui
 
 import android.app.Activity
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.view.View
 import android.widget.TextView
+import com.jjoe64.graphview.GridLabelRenderer
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
@@ -29,6 +29,14 @@ class CryptoCoinDetailActivity: Activity(), View.OnClickListener {
     companion object {
         val EXTRA_CRYPTO_COIN = "CRYPTO_COIN"
         val ALPHA = 40
+        val DAY = 1
+        val WEEK = 7
+        val MONTH = 30
+        val QUARTER_YEAR = 90
+        val HALF_YEAR = 180
+        val YEAR = 365
+        val ALL = -1
+        var mSelectedPeriod = WEEK
     }
 
     private lateinit var mCryptoCoin : CryptoCoin
@@ -45,8 +53,22 @@ class CryptoCoinDetailActivity: Activity(), View.OnClickListener {
 
         initButtons()
         bindCoinData()
-        fetchCryptoCoinHistory(1)
-        bt_one_day.setTextColor(ContextCompat.getColor(this, R.color.white))
+        fetchCryptoCoinHistory()
+        updateButtonColors(bt_one_week)
+    }
+
+    override fun onClick(v : View?) {
+        when(v?.id) {
+            R.id.bt_one_day -> mSelectedPeriod = DAY
+            R.id.bt_one_week -> mSelectedPeriod = WEEK
+            R.id.bt_one_month -> mSelectedPeriod = MONTH
+            R.id.bt_three_month -> mSelectedPeriod = QUARTER_YEAR
+            R.id.bt_six_month -> mSelectedPeriod = HALF_YEAR
+            R.id.bt_one_year -> mSelectedPeriod = YEAR
+            R.id.bt_all -> mSelectedPeriod = ALL
+        }
+        fetchCryptoCoinHistory()
+        updateButtonColors(v)
     }
 
     private fun initButtons() {
@@ -59,33 +81,9 @@ class CryptoCoinDetailActivity: Activity(), View.OnClickListener {
         bt_all.setOnClickListener(this)
     }
 
-    override fun onClick(v : View?) {
-        when(v?.id) {
-            R.id.bt_one_day -> fetchCryptoCoinHistory(1)
-            R.id.bt_one_week -> fetchCryptoCoinHistory(7)
-            R.id.bt_one_month -> fetchCryptoCoinHistory(30)
-            R.id.bt_three_month -> fetchCryptoCoinHistory(90)
-            R.id.bt_six_month -> fetchCryptoCoinHistory(180)
-            R.id.bt_one_year -> fetchCryptoCoinHistory(365)
-            R.id.bt_all -> fetchCryptoCoinHistory(0)
-        }
-        updateButtonColors(v)
-    }
-
-    private fun updateButtonColors(v : View?) {
-        bt_one_day.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
-        bt_one_month.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
-        bt_one_week.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
-        bt_three_month.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
-        bt_six_month.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
-        bt_one_year.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
-        bt_all.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
-        (v as TextView).setTextColor(ContextCompat.getColor(this, R.color.white))
-    }
-
-    private fun fetchCryptoCoinHistory(dayCount: Int) {
+    private fun fetchCryptoCoinHistory() {
         progress_bar.visibility = View.VISIBLE
-        cryptoCoinRepository.listCryptoCoinHistory(dayCount, mCryptoCoin.short)
+        cryptoCoinRepository.listCryptoCoinHistory(mSelectedPeriod, mCryptoCoin.short)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({
@@ -102,88 +100,100 @@ class CryptoCoinDetailActivity: Activity(), View.OnClickListener {
     }
 
     private fun displayPriceHistoryInfo(priceHistory: List<CryptoCoinHistoryPriceItem>) {
-        val dataPoints = ArrayList<DataPoint>()
-        val minX = priceHistory[0].date.time.toDouble()
-        val maxX = priceHistory[priceHistory.size -1].date.time.toDouble()
-        var minY = priceHistory[0].value
-        var maxY = priceHistory[0].value
 
-        for (priceItem in priceHistory) {
-            minY = Math.min(minY, priceItem.value)
-            maxY = Math.max(maxY, priceItem.value)
-
-            dataPoints.add(DataPoint(priceItem.date, priceItem.value))
-        }
+        val dataPoints = priceHistory.mapTo(ArrayList()) { DataPoint(it.date, it.value) }
 
         val array = arrayOfNulls<DataPoint>(dataPoints.size)
         val series = LineGraphSeries<DataPoint>(dataPoints.toArray(array))
+
         series.isDrawBackground = true
 
         val color = mCryptoCoin.iconColor(this)
         series.color = color
         series.backgroundColor = color and 0x00ffffff or (ALPHA shl 24)
-        series.thickness = 4
+        series.thickness = 6
 
         with(graph_view_history) {
             removeAllSeries()
             addSeries(series)
+            setPadding(0, 0, 0 , 16)
             with(viewport) {
                 isXAxisBoundsManual = true
                 isYAxisBoundsManual = true
-                setMinX(minX)
-                setMaxX(maxX)
-                setMinY(minY)
-                setMaxY(maxY)
+                setMinX(series.lowestValueX)
+                setMaxX(series.highestValueX)
+                setMinY(series.lowestValueY)
+                setMaxY(series.highestValueY)
             }
-            with(gridLabelRenderer) {
-                isHorizontalLabelsVisible = true
-                isVerticalLabelsVisible = false
-                setPadding(0, 0, 0 , 8)
-                labelFormatter = DateAsXAxisLabelFormatter(
-                        context,
-                        SimpleDateFormat("dd/MM", Locale.getDefault()))
-            }
+
+            setupGridLabelRenderer(gridLabelRenderer)
             visibility = View.VISIBLE
         }
     }
 
-    private fun bindCoinData() {
-        val color = mCryptoCoin.iconColor(this)
-        actionBar.setBackgroundDrawable(ColorDrawable(color))
-        val alpha = 180
-        window.statusBarColor = color and 0x00ffffff or (alpha shl 24)
+    private fun setupGridLabelRenderer(gridLabelRenderer: GridLabelRenderer) {
+        with(gridLabelRenderer) {
+            isHorizontalLabelsVisible = true
+            isVerticalLabelsVisible = false
+            numVerticalLabels = 3
 
+            when(mSelectedPeriod) {
+                DAY -> {
+                    labelFormatter = getCustomLabelFormatter("HH:mm")
+                    numHorizontalLabels = 4
+                }
+                WEEK, MONTH, QUARTER_YEAR, HALF_YEAR, YEAR -> {
+                    labelFormatter = getCustomLabelFormatter("dd/MM")
+                    numHorizontalLabels = 4
+                }
+                ALL -> {
+                    labelFormatter = getCustomLabelFormatter("MM/yy")
+                    numHorizontalLabels = 4
+                }
+            }
+        }
+    }
+
+    private fun getCustomLabelFormatter(format: String): DateAsXAxisLabelFormatter {
+        return DateAsXAxisLabelFormatter(
+                this@CryptoCoinDetailActivity,
+                SimpleDateFormat(format, Locale.getDefault()))
+    }
+
+    private fun bindCoinData() {
         title = getString(R.string.cryptocoin_name_format, mCryptoCoin.long, mCryptoCoin.short)
 
         val numberFormat = NumberFormat.getNumberInstance()
         tv_price_usd.text = getString(R.string.price_usd_format, numberFormat.format(mCryptoCoin.price))
-        val marketCapText = getString(R.string.price_usd_format, numberFormat.format(mCryptoCoin.mktcap))
-        tv_market_cap.text = getString(R.string.label_market_cap, marketCapText)
-        val supplyText = numberFormat.format(mCryptoCoin.supply)
-        tv_total_supply.text = getString(R.string.label_total_supply, supplyText)
-
-        bindPercentages()
+        bindPercentage()
     }
 
-    private fun bindPercentages() {
-        bindPercentage(mCryptoCoin.cap24hrChange, tv_percent_change_24h)
-    }
-
-    private fun bindPercentage(percentage: Double, percentageTextView: TextView) {
+    private fun bindPercentage() {
+        val percentage = mCryptoCoin.cap24hrChange
         val green = ContextCompat.getColor(this, R.color.green)
         val red = ContextCompat.getColor(this, R.color.red)
 
         if (percentage > 0) {
-            percentageTextView.setTextColor(green)
+            tv_percent_change_24h.setTextColor(green)
         } else {
-            percentageTextView.setTextColor(red)
+            tv_percent_change_24h.setTextColor(red)
         }
         var formattedPercentage = NumberFormat.getNumberInstance().format(percentage)
 
         if (percentage > 0) {
             formattedPercentage = "+" + formattedPercentage
         }
-        percentageTextView.text = getString(R.string.perc_change_format, formattedPercentage)
+        tv_percent_change_24h.text = getString(R.string.perc_change_format, formattedPercentage)
     }
 
+    private fun updateButtonColors(v : View?) {
+        bt_one_day.setTextColor(ContextCompat.getColor(this, R.color.white))
+        bt_one_month.setTextColor(ContextCompat.getColor(this, R.color.white))
+        bt_one_week.setTextColor(ContextCompat.getColor(this, R.color.white))
+        bt_three_month.setTextColor(ContextCompat.getColor(this, R.color.white))
+        bt_six_month.setTextColor(ContextCompat.getColor(this, R.color.white))
+        bt_one_year.setTextColor(ContextCompat.getColor(this, R.color.white))
+        bt_all.setTextColor(ContextCompat.getColor(this, R.color.white))
+        (v as TextView).setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
+    }
 }
