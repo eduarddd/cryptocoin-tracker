@@ -3,23 +3,29 @@ package com.nightlydev.cryptocointracker.ui
 import android.app.Activity
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import com.jjoe64.graphview.GridLabelRenderer
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
+import com.nightlydev.cryptocointracker.App
 import com.nightlydev.cryptocointracker.R
 import com.nightlydev.cryptocointracker.data.CryptoCoinRepository
 import com.nightlydev.cryptocointracker.data.response.CryptoCoinHistoryPriceItem
 import com.nightlydev.cryptocointracker.data.response.priceHistory
 import com.nightlydev.cryptocointracker.model.CryptoCoin
+import com.nightlydev.cryptocointracker.model.FavoriteCryptoCoin
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_crypto_coin_detail.*
+import org.reactivestreams.Subscription
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.function.Consumer
 
 /**
  * @author edu (edusevilla90@gmail.com)
@@ -40,6 +46,7 @@ class CryptoCoinDetailActivity: Activity(), View.OnClickListener {
     }
 
     private lateinit var mCryptoCoin : CryptoCoin
+    private var mFavoriteMenuItem: MenuItem? = null
     private val cryptoCoinRepository = CryptoCoinRepository()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,6 +62,62 @@ class CryptoCoinDetailActivity: Activity(), View.OnClickListener {
         bindCoinData()
         fetchCryptoCoinHistory()
         updateButtonColors(bt_one_week)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_detail, menu)
+        mFavoriteMenuItem = menu?.findItem(R.id.action_save_favorite)
+        updateFavoriteMenuItem()
+
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item?.itemId == R.id.action_save_favorite) {
+            saveFavorite()
+
+            return true
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateFavoriteMenuItem()
+    }
+
+    private fun saveFavorite() {
+        App.cryptoCoinDatabase?.favoriteCryptoCoinDao()?.findFavorite(mCryptoCoin.id)
+                ?.subscribeOn(Schedulers.io())
+                ?.observeOn(AndroidSchedulers.mainThread())
+                ?.subscribe({
+                    result: FavoriteCryptoCoin? ->
+                    if (result == null) {
+                        App.cryptoCoinDatabase?.favoriteCryptoCoinDao()?.insert(mCryptoCoin)
+                    } else {
+                         App.cryptoCoinDatabase?.favoriteCryptoCoinDao()?.delete(mCryptoCoin)
+                    }
+                }, {
+                    error -> App.cryptoCoinDatabase?.favoriteCryptoCoinDao()?.insert(mCryptoCoin)
+                }
+                )
+    }
+
+    private fun updateFavoriteMenuItem() {
+        App.cryptoCoinDatabase?.favoriteCryptoCoinDao()?.findFavorite(mCryptoCoin.id)
+                ?.subscribeOn(Schedulers.io())
+                ?.observeOn(AndroidSchedulers.mainThread())
+                ?.subscribe({
+                    result: FavoriteCryptoCoin? ->
+                    if (result == null) {
+                        mFavoriteMenuItem?.setIcon(R.drawable.ic_star_border_white_24dp)
+                    } else {
+                        mFavoriteMenuItem?.setIcon(R.drawable.ic_star_white_24dp)
+                    }
+                }, {
+                    error -> mFavoriteMenuItem?.setIcon(R.drawable.ic_star_border_white_24dp)
+                })
     }
 
     override fun onClick(v : View?) {
@@ -100,7 +163,6 @@ class CryptoCoinDetailActivity: Activity(), View.OnClickListener {
     }
 
     private fun displayPriceHistoryInfo(priceHistory: List<CryptoCoinHistoryPriceItem>) {
-
         val dataPoints = priceHistory.mapTo(ArrayList()) { DataPoint(it.date, it.value) }
 
         val array = arrayOfNulls<DataPoint>(dataPoints.size)

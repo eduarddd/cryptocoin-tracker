@@ -1,6 +1,7 @@
 package com.nightlydev.cryptocointracker.ui
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Typeface
 import android.support.annotation.ColorInt
 import android.support.v4.content.ContextCompat
@@ -38,7 +39,11 @@ fun CryptoCoin.iconColor(context: Context): Int {
     if (iconColorId <= 0 || iconColorId == 0xFFFFFF) {
         iconColorId = R.color.colorPrimary
     }
-    return ContextCompat.getColor(context, iconColorId)
+    try {
+        return ContextCompat.getColor(context, iconColorId)
+    } catch (exception: Resources.NotFoundException) {
+         return ContextCompat.getColor(context, R.color.colorPrimary)
+    }
 }
 
 fun CryptoCoin.iconString(context: Context): String {
@@ -50,7 +55,11 @@ fun CryptoCoin.iconString(context: Context): String {
         iconRestId = context.resources.getIdentifier(iconSymbol, "string", context.packageName)
     }
     if (iconRestId > 0) {
-        return context.getString(iconRestId)
+        try {
+            return context.getString(iconRestId)
+        } catch (exception: Resources.NotFoundException) {
+            return ""
+        }
     } else {
         return ""
     }

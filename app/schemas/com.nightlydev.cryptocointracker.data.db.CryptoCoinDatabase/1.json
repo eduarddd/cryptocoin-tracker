@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "d7d39b293f5bfb695682837c833e56fa",
+    "identityHash": "ee20f46ccb453f0329025248c58d7ea1",
     "entities": [
       {
         "tableName": "CryptoCoin",
@@ -59,11 +59,58 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "favoriteCryptoCoin",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `cryptoCoinId` INTEGER NOT NULL, FOREIGN KEY(`cryptoCoinId`) REFERENCES `CryptoCoin`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cryptoCoinId",
+            "columnName": "cryptoCoinId",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_favoriteCryptoCoin_cryptoCoinId",
+            "unique": true,
+            "columnNames": [
+              "cryptoCoinId"
+            ],
+            "createSql": "CREATE UNIQUE INDEX `index_favoriteCryptoCoin_cryptoCoinId` ON `${TABLE_NAME}` (`cryptoCoinId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "CryptoCoin",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "cryptoCoinId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"d7d39b293f5bfb695682837c833e56fa\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"ee20f46ccb453f0329025248c58d7ea1\")"
     ]
   }
 }
