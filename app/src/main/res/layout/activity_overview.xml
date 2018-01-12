@@ -7,6 +7,8 @@
     android:orientation="vertical"
     tools:context="com.nightlydev.cryptocointracker.ui.OverviewActivity">
 
+    <include layout="@layout/toolbar_top"/>
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"

@@ -9,13 +9,13 @@ import android.arch.persistence.room.ForeignKey.CASCADE
  * @since 9-1-18
  */
 @Entity(tableName = "favoriteCryptoCoin",
-        indices = [Index(value = ["cryptoCoinId"], unique = true)],
+        indices = [Index(value = ["crypto_coin_id"], unique = true)],
         foreignKeys = [
             ForeignKey(
                     entity = CryptoCoin::class,
                     parentColumns = ["id"],
-                    childColumns = ["cryptoCoinId"],
+                    childColumns = ["crypto_coin_id"],
                     onDelete = CASCADE)])
 data class FavoriteCryptoCoin(
         @PrimaryKey(autoGenerate = true) var id: Long = 0,
-        @ColumnInfo(name = "cryptoCoinId") var cryptoCoinId: Long = 0)
+        @ColumnInfo(name = "crypto_coin_id") var cryptoCoinId: Long = 0)

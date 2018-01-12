@@ -1,27 +1,28 @@
 package com.nightlydev.cryptocointracker.ui
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.SearchView
 import com.nightlydev.cryptocointracker.App
-import com.nightlydev.cryptocointracker.data.CryptoCoinRepository
 import com.nightlydev.cryptocointracker.R
+import com.nightlydev.cryptocointracker.data.CryptoCoinRepository
 import com.nightlydev.cryptocointracker.model.CryptoCoin
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_overview.*
+import kotlinx.android.synthetic.main.toolbar_top.*
 
 /**
  * @author edu (edusevilla90@gmail.com)
  * @since 5-12-17
  */
-class OverviewActivity : Activity(),
+class OverviewActivity : AppCompatActivity(),
         SwipeRefreshLayout.OnRefreshListener,
         CryptoCoinsAdapter.OnClickHandler {
 
@@ -32,6 +33,7 @@ class OverviewActivity : Activity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_overview)
 
+        setSupportActionBar(toolbar)
         initRecyclerView()
     }
 

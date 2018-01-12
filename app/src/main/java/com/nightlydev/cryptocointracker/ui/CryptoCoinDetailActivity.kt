@@ -1,8 +1,10 @@
 package com.nightlydev.cryptocointracker.ui
 
-import android.app.Activity
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -11,27 +13,22 @@ import com.jjoe64.graphview.GridLabelRenderer
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
-import com.nightlydev.cryptocointracker.App
 import com.nightlydev.cryptocointracker.R
-import com.nightlydev.cryptocointracker.data.CryptoCoinRepository
+import com.nightlydev.cryptocointracker.data.CryptoCoinViewModel
+import com.nightlydev.cryptocointracker.data.ViewModelFactory
 import com.nightlydev.cryptocointracker.data.response.CryptoCoinHistoryPriceItem
-import com.nightlydev.cryptocointracker.data.response.priceHistory
 import com.nightlydev.cryptocointracker.model.CryptoCoin
-import com.nightlydev.cryptocointracker.model.FavoriteCryptoCoin
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_crypto_coin_detail.*
-import org.reactivestreams.Subscription
+import kotlinx.android.synthetic.main.toolbar_top.*
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.function.Consumer
 
 /**
  * @author edu (edusevilla90@gmail.com)
  * @since 15-12-17
  */
-class CryptoCoinDetailActivity: Activity(), View.OnClickListener {
+class CryptoCoinDetailActivity: AppCompatActivity(), View.OnClickListener {
     companion object {
         val EXTRA_CRYPTO_COIN = "CRYPTO_COIN"
         val ALPHA = 40
@@ -45,79 +42,66 @@ class CryptoCoinDetailActivity: Activity(), View.OnClickListener {
         var mSelectedPeriod = WEEK
     }
 
-    private lateinit var mCryptoCoin : CryptoCoin
-    private var mFavoriteMenuItem: MenuItem? = null
-    private val cryptoCoinRepository = CryptoCoinRepository()
+    var mCryptoCoinViewModel: CryptoCoinViewModel? = null
+    private lateinit var mFavoriteMenuItem: MenuItem
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_crypto_coin_detail)
 
+        setSupportActionBar(toolbar)
         title = ""
-        actionBar.setDisplayHomeAsUpEnabled(true)
-
-        mCryptoCoin = intent.getSerializableExtra(EXTRA_CRYPTO_COIN) as CryptoCoin
-
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
         initButtons()
-        bindCoinData()
-        fetchCryptoCoinHistory()
-        updateButtonColors(bt_one_week)
+
+        val cryptoCoin = intent.getSerializableExtra(EXTRA_CRYPTO_COIN) as CryptoCoin
+        val viewModelFactory = ViewModelFactory(cryptoCoin)
+        mCryptoCoinViewModel = ViewModelProviders
+                .of(this, viewModelFactory)
+                .get(CryptoCoinViewModel::class.java)
+
+        mCryptoCoinViewModel
+                ?.getCryptoCoin()
+                ?.observe(this, Observer<CryptoCoin> { coin ->
+            bindCoinData(coin)
+            fetchCryptoCoinHistory(coin)
+        })
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_detail, menu)
-        mFavoriteMenuItem = menu?.findItem(R.id.action_save_favorite)
-        updateFavoriteMenuItem()
+        mFavoriteMenuItem = menu.findItem(R.id.action_save_favorite)
+        setupFavoriteMenuItem()
 
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item?.itemId == R.id.action_save_favorite) {
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_save_favorite -> {
             saveFavorite()
 
-            return true
+            true
         }
-
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        updateFavoriteMenuItem()
+        android.R.id.home -> {
+            finish()
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 
     private fun saveFavorite() {
-        App.cryptoCoinDatabase?.favoriteCryptoCoinDao()?.findFavorite(mCryptoCoin.id)
-                ?.subscribeOn(Schedulers.io())
-                ?.observeOn(AndroidSchedulers.mainThread())
-                ?.subscribe({
-                    result: FavoriteCryptoCoin? ->
-                    if (result == null) {
-                        App.cryptoCoinDatabase?.favoriteCryptoCoinDao()?.insert(mCryptoCoin)
-                    } else {
-                         App.cryptoCoinDatabase?.favoriteCryptoCoinDao()?.delete(mCryptoCoin)
-                    }
-                }, {
-                    error -> App.cryptoCoinDatabase?.favoriteCryptoCoinDao()?.insert(mCryptoCoin)
-                }
-                )
+       mCryptoCoinViewModel?.saveFavorite()
     }
 
-    private fun updateFavoriteMenuItem() {
-        App.cryptoCoinDatabase?.favoriteCryptoCoinDao()?.findFavorite(mCryptoCoin.id)
-                ?.subscribeOn(Schedulers.io())
-                ?.observeOn(AndroidSchedulers.mainThread())
-                ?.subscribe({
-                    result: FavoriteCryptoCoin? ->
-                    if (result == null) {
-                        mFavoriteMenuItem?.setIcon(R.drawable.ic_star_border_white_24dp)
-                    } else {
-                        mFavoriteMenuItem?.setIcon(R.drawable.ic_star_white_24dp)
-                    }
-                }, {
-                    error -> mFavoriteMenuItem?.setIcon(R.drawable.ic_star_border_white_24dp)
-                })
+    private fun setupFavoriteMenuItem() {
+        mCryptoCoinViewModel?.isFavorite()?.observe(this, Observer<Boolean> { isFavorite ->
+            if (isFavorite!!) {
+                mFavoriteMenuItem.setIcon(R.drawable.ic_star_white_24dp)
+            } else {
+                mFavoriteMenuItem.setIcon(R.drawable.ic_star_border_white_24dp)
+            }
+        })
     }
 
     override fun onClick(v : View?) {
@@ -130,7 +114,8 @@ class CryptoCoinDetailActivity: Activity(), View.OnClickListener {
             R.id.bt_one_year -> mSelectedPeriod = YEAR
             R.id.bt_all -> mSelectedPeriod = ALL
         }
-        fetchCryptoCoinHistory()
+        mCryptoCoinViewModel?.fetchCryptoCoinHistory(mSelectedPeriod)
+        progress_bar.visibility = View.VISIBLE
         updateButtonColors(v)
     }
 
@@ -144,33 +129,28 @@ class CryptoCoinDetailActivity: Activity(), View.OnClickListener {
         bt_all.setOnClickListener(this)
     }
 
-    private fun fetchCryptoCoinHistory() {
+    private fun fetchCryptoCoinHistory(cryptoCoin: CryptoCoin?) {
         progress_bar.visibility = View.VISIBLE
-        cryptoCoinRepository.listCryptoCoinHistory(mSelectedPeriod, mCryptoCoin.short)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({
-                    result ->
-                        progress_bar.visibility = View.GONE
-                        tv_history_error.visibility = View.GONE
-                        displayPriceHistoryInfo(result.priceHistory())
-                }, {
-                    error ->
-                        progress_bar.visibility = View.GONE
-                        tv_history_error.visibility = View.VISIBLE
-                        error.printStackTrace()
+        mCryptoCoinViewModel?.getCryptoCoinHistory()?.observe(
+                this,
+                Observer<List<CryptoCoinHistoryPriceItem>> { priceHistory ->
+                    progress_bar.visibility = View.GONE
+                    tv_history_error.visibility = View.GONE
+                    displayPriceHistoryInfo(cryptoCoin, priceHistory)
                 })
+        mCryptoCoinViewModel?.fetchCryptoCoinHistory(mSelectedPeriod)
     }
 
-    private fun displayPriceHistoryInfo(priceHistory: List<CryptoCoinHistoryPriceItem>) {
-        val dataPoints = priceHistory.mapTo(ArrayList()) { DataPoint(it.date, it.value) }
+    private fun displayPriceHistoryInfo(cryptoCoin: CryptoCoin?,
+                                        priceHistory: List<CryptoCoinHistoryPriceItem>?) {
+        val dataPoints = priceHistory!!.mapTo(ArrayList()) { DataPoint(it.date, it.value) }
 
         val array = arrayOfNulls<DataPoint>(dataPoints.size)
         val series = LineGraphSeries<DataPoint>(dataPoints.toArray(array))
 
         series.isDrawBackground = true
 
-        val color = mCryptoCoin.iconColor(this)
+        val color = cryptoCoin!!.iconColor(this)
         series.color = color
         series.backgroundColor = color and 0x00ffffff or (ALPHA shl 24)
         series.thickness = 6
@@ -222,16 +202,16 @@ class CryptoCoinDetailActivity: Activity(), View.OnClickListener {
                 SimpleDateFormat(format, Locale.getDefault()))
     }
 
-    private fun bindCoinData() {
-        title = getString(R.string.cryptocoin_name_format, mCryptoCoin.long, mCryptoCoin.short)
+    private fun bindCoinData(cryptoCoin: CryptoCoin?) {
+        title = getString(R.string.cryptocoin_name_format, cryptoCoin?.long, cryptoCoin?.short)
 
         val numberFormat = NumberFormat.getNumberInstance()
-        tv_price_usd.text = getString(R.string.price_usd_format, numberFormat.format(mCryptoCoin.price))
-        bindPercentage()
+        tv_price_usd.text = getString(R.string.price_usd_format, numberFormat.format(cryptoCoin?.price))
+        bindPercentage(cryptoCoin)
     }
 
-    private fun bindPercentage() {
-        val percentage = mCryptoCoin.cap24hrChange
+    private fun bindPercentage(cryptoCoin: CryptoCoin?) {
+        val percentage = cryptoCoin?.cap24hrChange ?: return
         val green = ContextCompat.getColor(this, R.color.green)
         val red = ContextCompat.getColor(this, R.color.red)
 
