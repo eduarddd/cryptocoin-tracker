@@ -3,6 +3,7 @@ package com.nightlydev.cryptocointracker.cryptoCoinDetail
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
@@ -110,6 +111,13 @@ class CryptoCoinDetailActivity: AppCompatActivity(), View.OnClickListener {
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
+        super.onSaveInstanceState(outState, outPersistentState)
+
+        outState?.putLong(STATE_CRYPTO_COIN_ID, mCryptoCoinViewModel?.getCryptoCoin()?.value?.id!!)
+        outState?.putInt(STATE_PERIOD, mCryptoCoinViewModel?.getDisplayHistoryPeriod()?.value!!)
     }
 
     private fun saveFavorite() = mCryptoCoinViewModel?.saveFavorite()

@@ -1,4 +1,4 @@
-package com.nightlydev.cryptocointracker.ui
+package com.nightlydev.cryptocointracker.cryptoCoinOverview
 
 import android.annotation.SuppressLint
 import android.support.v4.content.ContextCompat

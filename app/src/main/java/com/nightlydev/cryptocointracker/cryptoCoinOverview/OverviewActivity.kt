@@ -1,21 +1,20 @@
-package com.nightlydev.cryptocointracker.ui
+package com.nightlydev.cryptocointracker.cryptoCoinOverview
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
-import com.nightlydev.cryptocointracker.App
 import com.nightlydev.cryptocointracker.R
 import com.nightlydev.cryptocointracker.cryptoCoinDetail.CryptoCoinDetailActivity
-import com.nightlydev.cryptocointracker.data.CryptoCoinRepository
 import com.nightlydev.cryptocointracker.model.CryptoCoin
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import com.nightlydev.cryptocointracker.ui.DividerItemDecoration
 import kotlinx.android.synthetic.main.activity_overview.*
 import kotlinx.android.synthetic.main.toolbar_top.*
 
@@ -27,8 +26,9 @@ class OverviewActivity : AppCompatActivity(),
         SwipeRefreshLayout.OnRefreshListener,
         CryptoCoinsAdapter.OnClickHandler {
 
+
     private lateinit var mAdapter : CryptoCoinsAdapter
-    private val cryptoCoinRepository = CryptoCoinRepository()
+    private var mOverviewViewModel : OverviewViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +36,32 @@ class OverviewActivity : AppCompatActivity(),
 
         setSupportActionBar(toolbar)
         initRecyclerView()
+        mOverviewViewModel = ViewModelProviders.of(this).get(OverviewViewModel::class.java)
+        subscribeToCryptoCoinList()
+        subscribeToSearchQuery()
+
+        if (savedInstanceState != null) {
+            val searchQuery = savedInstanceState.getString(STATE_SEARCH_QUERY)
+            mOverviewViewModel?.getSearchQuery()?.value = searchQuery
+        }
+    }
+
+    private fun subscribeToCryptoCoinList() {
+        mOverviewViewModel?.getCryptoCoinList()?.observe(
+                this,
+                Observer { cryptoCoinList ->
+                    swipe_refresh_layout.isRefreshing = false
+                    if (cryptoCoinList != null) {
+                        mAdapter.setItems(cryptoCoinList)
+                    }
+                })
+    }
+
+    private fun subscribeToSearchQuery() {
+        mOverviewViewModel?.getSearchQuery()?.observe(
+                this,
+                Observer { searchQuery -> mAdapter.filter(searchQuery) }
+        )
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -54,14 +80,14 @@ class OverviewActivity : AppCompatActivity(),
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
+        super.onSaveInstanceState(outState, outPersistentState)
 
-        fetchCryptoCoinsList()
+        outState?.putString(STATE_SEARCH_QUERY, mOverviewViewModel?.getSearchQuery()?.value)
     }
 
     override fun onRefresh() {
-        fetchCryptoCoinsList()
+        mOverviewViewModel?.refreshCryptoCoinList()
     }
 
     override fun onClick(cryptoCoin: CryptoCoin) {
@@ -75,8 +101,7 @@ class OverviewActivity : AppCompatActivity(),
             }
 
             override fun onQueryTextChange(searchQuery: String?): Boolean {
-                mAdapter.filter(searchQuery)
-                rv_crypto_coins_overview.scrollToPosition(0)
+                mOverviewViewModel?.getSearchQuery()?.value = searchQuery
                 return true
             }
         })
@@ -93,38 +118,16 @@ class OverviewActivity : AppCompatActivity(),
             adapter = mAdapter
             addItemDecoration(DividerItemDecoration(this@OverviewActivity))
         }
-        App.cryptoCoinDatabase?.cryptoCoinDao()?.getAllCryptoCoins()
-                ?.subscribeOn(Schedulers.io())
-                ?.observeOn(AndroidSchedulers.mainThread())
-                ?.subscribe { cryptoCoinList ->
-                    mAdapter.setItems(cryptoCoinList)
-                }
     }
 
-    private fun fetchCryptoCoinsList() {
-        cryptoCoinRepository.listCryptoCoins()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({
-                    result ->
-                    saveCryptoCoins(result)
-                    swipe_refresh_layout.isRefreshing = false
-                }, {
-                    error ->
-                    error.printStackTrace()
-                    swipe_refresh_layout.isRefreshing = false
-                })
-    }
-
-    private fun saveCryptoCoins(cryptoCoinList: List<CryptoCoin>) {
-        Single.fromCallable {
-            App.cryptoCoinDatabase?.cryptoCoinDao()?.insertAll(cryptoCoinList)
-        }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe()
-    }
 
     private fun startCryptoCoinDetailActivity(cryptoCoin: CryptoCoin) {
         val intent = Intent(this, CryptoCoinDetailActivity::class.java)
         intent.putExtra(CryptoCoinDetailActivity.EXTRA_CRYPTO_COIN_ID, cryptoCoin.id)
         startActivity(intent)
+    }
+
+    companion object {
+        val STATE_SEARCH_QUERY = "SEARCH_QUERY"
     }
 }

@@ -21,9 +21,31 @@ class CryptoCoinRepository {
     private val cryptoCoinService: CryptoCoinService = CryptoCoinService.create()
     private val db = App.cryptoCoinDatabase
 
-    fun listCryptoCoins(): Observable<List<CryptoCoin>> = cryptoCoinService.listCryptoCoins()
+    fun getAllCryptoCoins() : LiveData<List<CryptoCoin>>? {
+        return db?.cryptoCoinDao()?.getAllCryptoCoins()
+    }
+
+    fun refrechCryptoCoinList() {
+        cryptoCoinService.listCryptoCoins()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({
+                    result -> saveCryptoCoins(result)
+                },{
+                    error -> run {
+                    error.printStackTrace()
+                }})
+    }
+
+    private fun saveCryptoCoins(cryptoCoinList: List<CryptoCoin>) {
+        Single.fromCallable {
+            db?.cryptoCoinDao()?.insertAll(cryptoCoinList)
+        }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe()
+    }
+
     fun getCryptoCoin(cryptoCoinId: Long) =
             db?.cryptoCoinDao()?.getCryptoCoin(cryptoCoinId = cryptoCoinId)!!
+
     fun getFavorites() : LiveData<List<CryptoCoin>>? =
             db?.favoriteCryptoCoinDao()?.getFavorites()
 
@@ -42,12 +64,10 @@ class CryptoCoinRepository {
                 .subscribe({
                     result -> priceHistory.value = result.priceHistory()
                 },{
-                    error ->
-                    run {
+                    error -> run {
                         error.printStackTrace()
                         priceHistory.value = null
-                    }
-                })
+                }})
         return priceHistory
     }
 

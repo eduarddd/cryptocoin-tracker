@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.nightlydev.cryptocointracker.ui.OverviewActivity">
+    tools:context="com.nightlydev.cryptocointracker.cryptoCoinOverview.OverviewActivity">
 
     <include layout="@layout/toolbar_top"/>
 

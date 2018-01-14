@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".ui.OverviewActivity">
+        <activity android:name=".cryptoCoinOverview.OverviewActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -22,7 +22,7 @@
         </activity>
 
         <activity android:name=".cryptoCoinDetail.CryptoCoinDetailActivity"
-            android:parentActivityName=".ui.OverviewActivity"
+            android:parentActivityName=".cryptoCoinOverview.OverviewActivity"
             android:label=""/>
 
     </application>
