@@ -1,5 +1,6 @@
 package com.nightlydev.cryptocointracker.model
 
+import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 import java.io.Serializable
@@ -28,7 +29,7 @@ import java.io.Serializable
 */
 @Entity
 data class CryptoCoin(@PrimaryKey(autoGenerate = true)
-                      var id: Long = 0,
+                      @ColumnInfo(name = "id") var id: Long = 0,
                       var long: String = "",
                       var short: String = "",
                       var price: Double = 0.0,

@@ -1,5 +1,6 @@
 package com.nightlydev.cryptocointracker.data.db
 
+import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.OnConflictStrategy
@@ -14,6 +15,9 @@ import io.reactivex.Flowable
 @Dao interface CryptoCoinDao {
     @Query("SELECT * FROM cryptoCoin")
     fun getAllCryptoCoins(): Flowable<List<CryptoCoin>>
+
+    @Query("SELECT * FROM cryptoCoin WHERE id = :arg0 LIMIT 1")
+    fun getCryptoCoin(cryptoCoinId: Long) : LiveData<CryptoCoin>
 
     @Insert
     fun insert(cryptoCoin: CryptoCoin)

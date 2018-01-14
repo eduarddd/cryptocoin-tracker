@@ -10,6 +10,7 @@ import android.view.Menu
 import android.view.MenuItem
 import com.nightlydev.cryptocointracker.App
 import com.nightlydev.cryptocointracker.R
+import com.nightlydev.cryptocointracker.cryptoCoinDetail.CryptoCoinDetailActivity
 import com.nightlydev.cryptocointracker.data.CryptoCoinRepository
 import com.nightlydev.cryptocointracker.model.CryptoCoin
 import io.reactivex.Single
@@ -123,7 +124,7 @@ class OverviewActivity : AppCompatActivity(),
 
     private fun startCryptoCoinDetailActivity(cryptoCoin: CryptoCoin) {
         val intent = Intent(this, CryptoCoinDetailActivity::class.java)
-        intent.putExtra(CryptoCoinDetailActivity.EXTRA_CRYPTO_COIN, cryptoCoin)
+        intent.putExtra(CryptoCoinDetailActivity.EXTRA_CRYPTO_COIN_ID, cryptoCoin.id)
         startActivity(intent)
     }
 }
