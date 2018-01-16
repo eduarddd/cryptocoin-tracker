@@ -14,17 +14,18 @@ import com.nightlydev.cryptocointracker.model.FavoriteCryptoCoin
  */
 @Dao interface FavoriteCryptoCoinDao {
     @Query("SELECT * FROM favoriteCryptoCoin " +
-            "INNER JOIN cryptoCoin ON favoriteCryptoCoin.crypto_coin_id = cryptoCoin.id ")
+            "INNER JOIN cryptoCoin ON favoriteCryptoCoin.crypto_coin_id = cryptoCoin.id " +
+            "ORDER BY cryptoCoin.market_cap DESC ")
     fun getFavorites(): LiveData<List<CryptoCoin>>
 
     @Query("SELECT * FROM favoriteCryptoCoin " +
             "INNER JOIN cryptoCoin ON favoriteCryptoCoin.crypto_coin_id = cryptoCoin.id " +
             "WHERE crypto_coin_id = :arg0 LIMIT 1")
-    fun findFavorite(cryptoCoinId: Long): LiveData<CryptoCoin?>
+    fun findFavorite(cryptoCoinId: String): LiveData<CryptoCoin?>
 
     @Insert(onConflict = REPLACE)
     fun insert(cryptoCoin: FavoriteCryptoCoin)
 
     @Query("DELETE FROM favoriteCryptoCoin WHERE crypto_coin_id = :arg0")
-    fun delete(cryptoCoinId: Long)
+    fun delete(cryptoCoinId: String)
 }

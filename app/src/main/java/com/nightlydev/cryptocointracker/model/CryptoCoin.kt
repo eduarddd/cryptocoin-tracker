@@ -28,11 +28,10 @@ import java.io.Serializable
  * @since 5-12-17
 */
 @Entity
-data class CryptoCoin(@PrimaryKey(autoGenerate = true)
-                      @ColumnInfo(name = "id") var id: Long = 0,
+data class CryptoCoin(@PrimaryKey(autoGenerate = false)
+                      @ColumnInfo(name = "id") var short: String = "",
                       var long: String = "",
-                      var short: String = "",
                       var price: Double = 0.0,
-                      var mktcap: Double = 0.0,
+                      @ColumnInfo(name = "market_cap") var mktcap: Double = 0.0,
                       var supply: Double = 0.0,
                       var cap24hrChange: Double = 0.0) : Serializable

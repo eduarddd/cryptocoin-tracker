@@ -13,6 +13,7 @@ import android.view.Menu
 import android.view.MenuItem
 import com.nightlydev.cryptocointracker.R
 import com.nightlydev.cryptocointracker.cryptoCoinDetail.CryptoCoinDetailActivity
+import com.nightlydev.cryptocointracker.favorites.FavoritesCryptoCoinActivity
 import com.nightlydev.cryptocointracker.model.CryptoCoin
 import com.nightlydev.cryptocointracker.ui.DividerItemDecoration
 import kotlinx.android.synthetic.main.activity_overview.*
@@ -72,12 +73,15 @@ class OverviewActivity : AppCompatActivity(),
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item?.itemId == R.id.action_search) {
-            return true
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId) {
+            R.id.action_search -> true
+            R.id.action_favorites -> {
+                startFavoritesCryptoCoinActivity()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
-
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
@@ -120,10 +124,14 @@ class OverviewActivity : AppCompatActivity(),
         }
     }
 
-
     private fun startCryptoCoinDetailActivity(cryptoCoin: CryptoCoin) {
         val intent = Intent(this, CryptoCoinDetailActivity::class.java)
-        intent.putExtra(CryptoCoinDetailActivity.EXTRA_CRYPTO_COIN_ID, cryptoCoin.id)
+        intent.putExtra(CryptoCoinDetailActivity.EXTRA_CRYPTO_COIN_ID, cryptoCoin.short)
+        startActivity(intent)
+    }
+
+    private fun startFavoritesCryptoCoinActivity() {
+        val intent = Intent(this, FavoritesCryptoCoinActivity::class.java)
         startActivity(intent)
     }
 

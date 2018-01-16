@@ -18,4 +18,4 @@ import android.arch.persistence.room.ForeignKey.CASCADE
                     onDelete = CASCADE)])
 data class FavoriteCryptoCoin(
         @PrimaryKey(autoGenerate = true) var id: Long = 0,
-        @ColumnInfo(name = "crypto_coin_id") var cryptoCoinId: Long = 0)
+        @ColumnInfo(name = "crypto_coin_id") var cryptoCoinId: String = "")

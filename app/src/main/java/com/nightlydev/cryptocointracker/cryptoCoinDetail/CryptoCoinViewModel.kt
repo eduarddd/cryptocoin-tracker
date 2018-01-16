@@ -12,8 +12,8 @@ import com.nightlydev.cryptocointracker.model.CryptoCoin
  * @author edu (edusevilla90@gmail.com)
  * @since 11-1-18
  */
-class CryptoCoinViewModel(cryptoCoinId: Long, displayHistoryPeriod: Int) : ViewModel() {
-    private var mCryptoCoinId = MutableLiveData<Long>()
+class CryptoCoinViewModel(cryptoCoinId: String, displayHistoryPeriod: Int) : ViewModel() {
+    private var mCryptoCoinId = MutableLiveData<String>()
     private var mCryptoCoin : LiveData<CryptoCoin>
     private var mDisplayHistoryPeriod : MutableLiveData<Int>
     private var mCryptoCoinHistory : LiveData<List<CryptoCoinHistoryPriceItem>?>? = null

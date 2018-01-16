@@ -2,27 +2,21 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "49d8af73401fd0265a7e4acf17cbe4ea",
+    "identityHash": "f37ebf5d7f034c02e89f87e01faeae92",
     "entities": [
       {
         "tableName": "CryptoCoin",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `long` TEXT NOT NULL, `short` TEXT NOT NULL, `price` REAL NOT NULL, `mktcap` REAL NOT NULL, `supply` REAL NOT NULL, `cap24hrChange` REAL NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `long` TEXT NOT NULL, `price` REAL NOT NULL, `market_cap` REAL NOT NULL, `supply` REAL NOT NULL, `cap24hrChange` REAL NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
-            "fieldPath": "id",
+            "fieldPath": "short",
             "columnName": "id",
-            "affinity": "INTEGER",
+            "affinity": "TEXT",
             "notNull": true
           },
           {
             "fieldPath": "long",
             "columnName": "long",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "short",
-            "columnName": "short",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -34,7 +28,7 @@
           },
           {
             "fieldPath": "mktcap",
-            "columnName": "mktcap",
+            "columnName": "market_cap",
             "affinity": "REAL",
             "notNull": true
           },
@@ -55,14 +49,14 @@
           "columnNames": [
             "id"
           ],
-          "autoGenerate": true
+          "autoGenerate": false
         },
         "indices": [],
         "foreignKeys": []
       },
       {
         "tableName": "favoriteCryptoCoin",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `crypto_coin_id` INTEGER NOT NULL, FOREIGN KEY(`crypto_coin_id`) REFERENCES `CryptoCoin`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `crypto_coin_id` TEXT NOT NULL, FOREIGN KEY(`crypto_coin_id`) REFERENCES `CryptoCoin`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -73,7 +67,7 @@
           {
             "fieldPath": "cryptoCoinId",
             "columnName": "crypto_coin_id",
-            "affinity": "INTEGER",
+            "affinity": "TEXT",
             "notNull": true
           }
         ],
@@ -110,7 +104,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"49d8af73401fd0265a7e4acf17cbe4ea\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"f37ebf5d7f034c02e89f87e01faeae92\")"
     ]
   }
 }

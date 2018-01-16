@@ -11,15 +11,16 @@ import com.nightlydev.cryptocointracker.model.CryptoCoin
  * @since 14-1-18
  */
 class OverviewViewModel : ViewModel() {
-    private var mCryptoCoinList : LiveData<List<CryptoCoin>>? = null
+    private var mCryptoCoinList : LiveData<List<CryptoCoin>>?
     private val mSearchQuery = MutableLiveData<String>()
     private val repository = CryptoCoinRepository()
 
     init {
         mCryptoCoinList = repository.getAllCryptoCoins()
+        refreshCryptoCoinList()
     }
 
     fun getCryptoCoinList() = mCryptoCoinList
-    fun refreshCryptoCoinList() = repository.refrechCryptoCoinList()
+    fun refreshCryptoCoinList() = repository.refreshCryptoCoinList()
     fun getSearchQuery() = mSearchQuery
 }

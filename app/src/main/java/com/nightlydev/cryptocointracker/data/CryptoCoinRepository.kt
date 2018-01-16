@@ -25,25 +25,25 @@ class CryptoCoinRepository {
         return db?.cryptoCoinDao()?.getAllCryptoCoins()
     }
 
-    fun refrechCryptoCoinList() {
+    fun refreshCryptoCoinList() {
         cryptoCoinService.listCryptoCoins()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({
-                    result -> saveCryptoCoins(result)
+                    result -> updateCryptoCoins(result)
                 },{
                     error -> run {
                     error.printStackTrace()
                 }})
     }
 
-    private fun saveCryptoCoins(cryptoCoinList: List<CryptoCoin>) {
+    private fun updateCryptoCoins(cryptoCoinList: List<CryptoCoin>) {
         Single.fromCallable {
-            db?.cryptoCoinDao()?.insertAll(cryptoCoinList)
+            db?.cryptoCoinDao()?.updateCryptoCoins(cryptoCoinList)
         }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe()
     }
 
-    fun getCryptoCoin(cryptoCoinId: Long) =
+    fun getCryptoCoin(cryptoCoinId: String) =
             db?.cryptoCoinDao()?.getCryptoCoin(cryptoCoinId = cryptoCoinId)!!
 
     fun getFavorites() : LiveData<List<CryptoCoin>>? =
@@ -73,7 +73,7 @@ class CryptoCoinRepository {
 
     fun saveFavorite(cryptoCoin: CryptoCoin?) {
         val favorite = FavoriteCryptoCoin()
-        favorite.cryptoCoinId = cryptoCoin!!.id
+        favorite.cryptoCoinId = cryptoCoin!!.short
         Single.fromCallable {
             db?.favoriteCryptoCoinDao()?.insert(favorite)
         }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe()
@@ -81,7 +81,7 @@ class CryptoCoinRepository {
 
     fun removeFavorite(cryptoCoin: CryptoCoin) {
         Single.fromCallable {
-            db?.favoriteCryptoCoinDao()?.delete(cryptoCoin.id)
+            db?.favoriteCryptoCoinDao()?.delete(cryptoCoin.short)
         }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe()
     }
 }

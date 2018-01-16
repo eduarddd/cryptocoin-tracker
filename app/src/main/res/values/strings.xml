@@ -10,6 +10,8 @@
     <string name="label_total_supply">Total supply: %1$s</string>
     <string name="perc_change_format">%1$s%% (24h)</string>
 
+    <string name="favorites">Favorites</string>
+
 
     <string name="error_history_not_available">History not available</string>
 

@@ -58,17 +58,17 @@ class CryptoCoinDetailActivity: AppCompatActivity(), View.OnClickListener {
         initButtons()
 
         if (savedInstanceState != null) {
-            val cryptoCoinId = savedInstanceState.getLong(STATE_CRYPTO_COIN_ID)
+            val cryptoCoinId = savedInstanceState.getString(STATE_CRYPTO_COIN_ID)
             val period = savedInstanceState.getInt(STATE_PERIOD)
             initViewModel(cryptoCoinId, period)
         } else {
-            val cryptoCoinId = intent.getLongExtra(EXTRA_CRYPTO_COIN_ID, -1)
+            val cryptoCoinId = intent.getStringExtra(EXTRA_CRYPTO_COIN_ID)
             val period = DEFAULT_PERIOD
             initViewModel(cryptoCoinId, period)
         }
     }
 
-    private fun initViewModel(cryptoCoinId: Long, period: Int) {
+    private fun initViewModel(cryptoCoinId: String, period: Int) {
         val viewModelFactory = ViewModelFactory(cryptoCoinId, period)
         mCryptoCoinViewModel = ViewModelProviders
                 .of(this, viewModelFactory)
@@ -116,7 +116,7 @@ class CryptoCoinDetailActivity: AppCompatActivity(), View.OnClickListener {
     override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
         super.onSaveInstanceState(outState, outPersistentState)
 
-        outState?.putLong(STATE_CRYPTO_COIN_ID, mCryptoCoinViewModel?.getCryptoCoin()?.value?.id!!)
+        outState?.putString(STATE_CRYPTO_COIN_ID, mCryptoCoinViewModel?.getCryptoCoin()?.value?.short!!)
         outState?.putInt(STATE_PERIOD, mCryptoCoinViewModel?.getDisplayHistoryPeriod()?.value!!)
     }
 
