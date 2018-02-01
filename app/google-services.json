@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "847292416650",
+    "firebase_url": "https://cyptocoin-tracker.firebaseio.com",
+    "project_id": "cyptocoin-tracker",
+    "storage_bucket": "cyptocoin-tracker.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:847292416650:android:bae6cf5370007ac4",
+        "android_client_info": {
+          "package_name": "com.nightlydev.cryptocointracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "847292416650-br9eh271o5ies6mrt47qlf9g80sj48po.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nightlydev.cryptocointracker",
+            "certificate_hash": "b2d36a9771e2a6177e8844448c40b99ff07c8b49"
+          }
+        },
+        {
+          "client_id": "847292416650-u1srlb3vk6k1nabbjlek10mkbb7ks2ve.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCs0avm7Rt7VQqb9vYkmqx3LNBeD4iJgGw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "847292416650-u1srlb3vk6k1nabbjlek10mkbb7ks2ve.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
