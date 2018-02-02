@@ -16,7 +16,7 @@ class MessagingService : FirebaseMessagingService() {
             Log.d(TAG, "Message data payload: " + remoteMessage.data)
         }
         if (remoteMessage.notification != null) {
-            Log.d(TAG, "Message Notification Body: " + remoteMessage.notification.body)
+            Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification()?.getBody())
         }
     }
 
