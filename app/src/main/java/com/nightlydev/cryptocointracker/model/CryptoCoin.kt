@@ -3,6 +3,7 @@ package com.nightlydev.cryptocointracker.model
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 /**
@@ -11,12 +12,12 @@ import java.io.Serializable
 
     {
         "cap24hrChange":3.34,
-        "long":"Bitcoin",
+        "longName":"Bitcoin",
         "mktcap":284446734242.4,
         "perc":3.34,
         "price":16990.2,
         "shapeshift":true,
-        "short":"BTC",
+        "shortName":"BTC",
         "supply":16741812,
         "usdVolume":14067700000,
         "volume":14067700000,
@@ -28,10 +29,12 @@ import java.io.Serializable
  * @since 5-12-17
 */
 @Entity
-data class CryptoCoin(@PrimaryKey(autoGenerate = false)
-                      @ColumnInfo(name = "id") var short: String = "",
-                      var long: String = "",
-                      var price: Double = 0.0,
-                      @ColumnInfo(name = "market_cap") var mktcap: Double = 0.0,
-                      var supply: Double = 0.0,
-                      var cap24hrChange: Double = 0.0) : Serializable
+data class CryptoCoin(@PrimaryKey @ColumnInfo(name = "id") @SerializedName("short") var shortName: String,
+                      @ColumnInfo(name = "long_name") @SerializedName("long") var longName: String,
+                      var price: Double,
+                      @ColumnInfo(name = "market_cap") var mktcap: Double,
+                      var supply: Double,
+                      var cap24hrChange: Double) : Serializable {
+
+    constructor() : this("", "", 0.0, 0.0, 0.0, 0.0)
+}

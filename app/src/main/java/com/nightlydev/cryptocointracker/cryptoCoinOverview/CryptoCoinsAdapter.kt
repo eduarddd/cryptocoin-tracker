@@ -52,8 +52,8 @@ class CryptoCoinsAdapter(clickHandler: OnClickHandler)
         }
         mFilteredItems.clear()
         for (cryptoCoin in mItems) {
-            if (cryptoCoin.short.contains(filter, true)
-                    || cryptoCoin.long.contains(filter, true)) {
+            if (cryptoCoin.shortName.contains(filter, true)
+                    || cryptoCoin.longName.contains(filter, true)) {
                 mFilteredItems.add(cryptoCoin)
             }
         }
@@ -79,7 +79,7 @@ class CryptoCoinsAdapter(clickHandler: OnClickHandler)
             rank.text = (adapterPosition + 1).toString()
             icon.setCoin(coin)
             //rank.text = coin.rank.toString()
-            name.text = itemView.context.getString(R.string.cryptocoin_name_format, coin.long, coin.short)
+            name.text = itemView.context.getString(R.string.cryptocoin_name_format, coin.longName, coin.shortName)
             val formattedPrice = NumberFormat.getNumberInstance().format(coin.price)
             priceUsd.text = itemView.context.getString(R.string.price_usd_format, formattedPrice)
             bindPercentageChanges(coin)

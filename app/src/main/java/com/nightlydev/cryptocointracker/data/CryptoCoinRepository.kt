@@ -19,10 +19,11 @@ import io.reactivex.schedulers.Schedulers
  */
 class CryptoCoinRepository {
     private val cryptoCoinService: CryptoCoinService = CryptoCoinService.create()
-    private val db = App.cryptoCoinDatabase
+    private val cryptoCoinDao = App.cryptoCoinDatabase?.cryptoCoinDao()
+    private val favoriteCryptoCoinDao = App.cryptoCoinDatabase?.favoriteCryptoCoinDao()
 
-    fun getAllCryptoCoins() : LiveData<List<CryptoCoin>>? {
-        return db?.cryptoCoinDao()?.getAllCryptoCoins()
+    fun getAllCryptoCoins(offset: Int = 0) : LiveData<List<CryptoCoin>>? {
+        return cryptoCoinDao?.getAllCryptoCoins(offset)
     }
 
     fun refreshCryptoCoinList() {
@@ -39,15 +40,15 @@ class CryptoCoinRepository {
 
     private fun updateCryptoCoins(cryptoCoinList: List<CryptoCoin>) {
         Single.fromCallable {
-            db?.cryptoCoinDao()?.updateCryptoCoins(cryptoCoinList)
+            cryptoCoinDao?.updateCryptoCoins(cryptoCoinList)
         }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe()
     }
 
     fun getCryptoCoin(cryptoCoinId: String) =
-            db?.cryptoCoinDao()?.getCryptoCoin(cryptoCoinId = cryptoCoinId)!!
+            cryptoCoinDao?.getCryptoCoin(cryptoCoinId = cryptoCoinId)!!
 
     fun getFavorites() : LiveData<List<CryptoCoin>>? =
-            db?.favoriteCryptoCoinDao()?.getFavorites()
+            favoriteCryptoCoinDao?.getFavorites()
 
     fun getCryptoCoinPriceHistory(dayCount: Int, coinSymbol: String)
             : LiveData<List<CryptoCoinHistoryPriceItem>?> {
@@ -73,15 +74,15 @@ class CryptoCoinRepository {
 
     fun saveFavorite(cryptoCoin: CryptoCoin?) {
         val favorite = FavoriteCryptoCoin()
-        favorite.cryptoCoinId = cryptoCoin!!.short
+        favorite.cryptoCoinId = cryptoCoin!!.shortName
         Single.fromCallable {
-            db?.favoriteCryptoCoinDao()?.insert(favorite)
+            favoriteCryptoCoinDao?.insert(favorite)
         }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe()
     }
 
     fun removeFavorite(cryptoCoin: CryptoCoin) {
         Single.fromCallable {
-            db?.favoriteCryptoCoinDao()?.delete(cryptoCoin.short)
+            favoriteCryptoCoinDao?.delete(cryptoCoin.shortName)
         }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe()
     }
 }

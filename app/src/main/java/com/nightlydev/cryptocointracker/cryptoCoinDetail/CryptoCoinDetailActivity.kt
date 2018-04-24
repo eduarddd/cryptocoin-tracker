@@ -116,7 +116,7 @@ class CryptoCoinDetailActivity: AppCompatActivity(), View.OnClickListener {
     override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
         super.onSaveInstanceState(outState, outPersistentState)
 
-        outState?.putString(STATE_CRYPTO_COIN_ID, mCryptoCoinViewModel?.getCryptoCoin()?.value?.short!!)
+        outState?.putString(STATE_CRYPTO_COIN_ID, mCryptoCoinViewModel?.getCryptoCoin()?.value?.shortName!!)
         outState?.putInt(STATE_PERIOD, mCryptoCoinViewModel?.getDisplayHistoryPeriod()?.value!!)
     }
 
@@ -219,7 +219,7 @@ class CryptoCoinDetailActivity: AppCompatActivity(), View.OnClickListener {
     }
 
     private fun bindCoinData(cryptoCoin: CryptoCoin?) {
-        title = getString(R.string.cryptocoin_name_format, cryptoCoin?.long, cryptoCoin?.short)
+        title = getString(R.string.cryptocoin_name_format, cryptoCoin?.longName, cryptoCoin?.shortName)
 
         val numberFormat = NumberFormat.getNumberInstance()
         tv_price_usd.text = getString(R.string.price_usd_format, numberFormat.format(cryptoCoin?.price))
