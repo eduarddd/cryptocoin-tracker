@@ -46,7 +46,7 @@ class FavoritesCryptoCoinActivity : AppCompatActivity(),
                 Observer { favoriteCoinsList ->
                     swipe_refresh_layout.isRefreshing = false
                     if (favoriteCoinsList != null) {
-                        mAdapter.setItems(favoriteCoinsList)
+                       // mAdapter.submitList(favoriteCoinsList)
                     }
                 }
         )

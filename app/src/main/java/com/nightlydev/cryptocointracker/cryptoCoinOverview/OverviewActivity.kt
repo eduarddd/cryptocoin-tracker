@@ -53,16 +53,16 @@ class OverviewActivity : AppCompatActivity(),
                 Observer { cryptoCoinList ->
                     swipe_refresh_layout.isRefreshing = false
                     if (cryptoCoinList != null) {
-                        mAdapter.setItems(cryptoCoinList)
+                        mAdapter.submitList(cryptoCoinList)
                     }
                 })
     }
 
     private fun subscribeToSearchQuery() {
-        mOverviewViewModel?.getSearchQuery()?.observe(
+        /*mOverviewViewModel?.getSearchQuery()?.observe(
                 this,
                 Observer { searchQuery -> mAdapter.filter(searchQuery) }
-        )
+        )*/
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
