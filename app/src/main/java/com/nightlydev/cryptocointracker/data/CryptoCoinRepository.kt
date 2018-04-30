@@ -3,6 +3,7 @@ package com.nightlydev.cryptocointracker.data
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import com.nightlydev.cryptocointracker.App
+import com.nightlydev.cryptocointracker.data.db.CryptoCoinDao
 import com.nightlydev.cryptocointracker.data.response.CryptoCoinHistoryPriceItem
 import com.nightlydev.cryptocointracker.data.response.CryptoCoinHistoryResponse
 import com.nightlydev.cryptocointracker.data.response.priceHistory
@@ -20,9 +21,31 @@ import io.reactivex.schedulers.Schedulers
 class CryptoCoinRepository {
     private val cryptoCoinService: CryptoCoinService = CryptoCoinService.create()
     private val db = App.cryptoCoinDatabase
+    private val cryptoCoinDao: CryptoCoinDao? = App.cryptoCoinDatabase?.cryptoCoinDao()
 
     fun getAllCryptoCoins() : LiveData<List<CryptoCoin>>? {
         return db?.cryptoCoinDao()?.getAllCryptoCoins()
+    }
+
+    fun getCryptocoins() : LiveData<Resource<List<CryptoCoin>?>> {
+        return object : NetworkBoundResource<List<CryptoCoin>, List<CryptoCoin>>() {
+            override fun saveCallResult(item: List<CryptoCoin>) {
+                cryptoCoinDao!!.updateCryptoCoins(item)
+            }
+
+            override fun shouldFetch(data: List<CryptoCoin>?): Boolean {
+                return true
+            }
+
+            override fun loadFromDb(): LiveData<List<CryptoCoin>> {
+                return cryptoCoinDao!!.getAllCryptoCoins()
+            }
+
+            override fun createObservable(): Observable<List<CryptoCoin>>? {
+                return cryptoCoinService.listCryptoCoins()
+            }
+
+        }.asLiveData()
     }
 
     fun refreshCryptoCoinList() {

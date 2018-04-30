@@ -13,6 +13,7 @@ import android.view.Menu
 import android.view.MenuItem
 import com.nightlydev.cryptocointracker.R
 import com.nightlydev.cryptocointracker.cryptoCoinDetail.CryptoCoinDetailActivity
+import com.nightlydev.cryptocointracker.data.Status
 import com.nightlydev.cryptocointracker.favorites.FavoritesCryptoCoinActivity
 import com.nightlydev.cryptocointracker.model.CryptoCoin
 import com.nightlydev.cryptocointracker.ui.DividerItemDecoration
@@ -52,9 +53,17 @@ class OverviewActivity : AppCompatActivity(),
                 this,
                 Observer { cryptoCoinList ->
                     swipe_refresh_layout.isRefreshing = false
-                    if (cryptoCoinList != null) {
-                        mAdapter.setItems(cryptoCoinList)
+                    when (cryptoCoinList?.status) {
+                        Status.SUCCESS ->
+                            if (cryptoCoinList.data != null) {
+                                mAdapter.setItems(cryptoCoinList.data!!)
+                            }
+
+                        Status.ERROR -> {}
+                        Status.LOADING ->  swipe_refresh_layout.isRefreshing = true
                     }
+
+
                 })
     }
 
