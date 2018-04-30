@@ -56,7 +56,7 @@ class OverviewActivity : AppCompatActivity(),
                     when (cryptoCoinList?.status) {
                         Status.SUCCESS ->
                             if (cryptoCoinList.data != null) {
-                                mAdapter.setItems(cryptoCoinList.data!!)
+                                mAdapter.submitList(cryptoCoinList.data!!)
                             }
 
                         Status.ERROR -> {}
@@ -68,10 +68,10 @@ class OverviewActivity : AppCompatActivity(),
     }
 
     private fun subscribeToSearchQuery() {
-        mOverviewViewModel?.getSearchQuery()?.observe(
+        /*mOverviewViewModel?.getSearchQuery()?.observe(
                 this,
                 Observer { searchQuery -> mAdapter.filter(searchQuery) }
-        )
+        )*/
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -135,7 +135,7 @@ class OverviewActivity : AppCompatActivity(),
 
     private fun startCryptoCoinDetailActivity(cryptoCoin: CryptoCoin) {
         val intent = Intent(this, CryptoCoinDetailActivity::class.java)
-        intent.putExtra(CryptoCoinDetailActivity.EXTRA_CRYPTO_COIN_ID, cryptoCoin.short)
+        intent.putExtra(CryptoCoinDetailActivity.EXTRA_CRYPTO_COIN_ID, cryptoCoin.shortName)
         startActivity(intent)
     }
 

@@ -20,12 +20,12 @@ import com.nightlydev.cryptocointracker.model.FavoriteCryptoCoin
 
     @Query("SELECT * FROM favoriteCryptoCoin " +
             "INNER JOIN cryptoCoin ON favoriteCryptoCoin.crypto_coin_id = cryptoCoin.id " +
-            "WHERE crypto_coin_id = :arg0 LIMIT 1")
+            "WHERE crypto_coin_id = :cryptoCoinId LIMIT 1")
     fun findFavorite(cryptoCoinId: String): LiveData<CryptoCoin?>
 
     @Insert(onConflict = REPLACE)
     fun insert(cryptoCoin: FavoriteCryptoCoin)
 
-    @Query("DELETE FROM favoriteCryptoCoin WHERE crypto_coin_id = :arg0")
+    @Query("DELETE FROM favoriteCryptoCoin WHERE crypto_coin_id = :cryptoCoinId")
     fun delete(cryptoCoinId: String)
 }

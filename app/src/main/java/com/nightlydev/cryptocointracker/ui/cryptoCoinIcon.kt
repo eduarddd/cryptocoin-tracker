@@ -31,10 +31,10 @@ class CryptoCoinIcon @JvmOverloads constructor(
 
 @ColorInt
 fun CryptoCoin.iconColor(context: Context): Int {
-    var iconColorId = context.resources.getIdentifier(short, "color", context.packageName)
+    var iconColorId = context.resources.getIdentifier(shortName, "color", context.packageName)
 
     if (iconColorId <= 0) {
-        iconColorId = context.resources.getIdentifier(long, "color", context.packageName)
+        iconColorId = context.resources.getIdentifier(longName, "color", context.packageName)
     }
     if (iconColorId <= 0 || iconColorId == 0xFFFFFF) {
         iconColorId = R.color.colorPrimary
@@ -47,7 +47,7 @@ fun CryptoCoin.iconColor(context: Context): Int {
 }
 
 fun CryptoCoin.iconString(context: Context): String {
-    var iconSymbol = short
+    var iconSymbol = shortName
     var iconRestId = context.resources.getIdentifier(iconSymbol, "string", context.packageName)
 
     if (iconRestId <= 0) {

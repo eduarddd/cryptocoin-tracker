@@ -46,7 +46,7 @@ class FavoritesCryptoCoinActivity : AppCompatActivity(),
                 Observer { favoriteCoinsList ->
                     swipe_refresh_layout.isRefreshing = false
                     if (favoriteCoinsList != null) {
-                        mAdapter.setItems(favoriteCoinsList)
+                       // mAdapter.submitList(favoriteCoinsList)
                     }
                 }
         )
@@ -75,7 +75,7 @@ class FavoritesCryptoCoinActivity : AppCompatActivity(),
 
     private fun startCryptoCoinDetailActivity(cryptoCoin: CryptoCoin) {
         val intent = Intent(this, CryptoCoinDetailActivity::class.java)
-        intent.putExtra(CryptoCoinDetailActivity.EXTRA_CRYPTO_COIN_ID, cryptoCoin.short)
+        intent.putExtra(CryptoCoinDetailActivity.EXTRA_CRYPTO_COIN_ID, cryptoCoin.shortName)
         startActivity(intent)
     }
 }

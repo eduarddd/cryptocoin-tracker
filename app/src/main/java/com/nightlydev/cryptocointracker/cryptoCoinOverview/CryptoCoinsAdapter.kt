@@ -1,7 +1,9 @@
 package com.nightlydev.cryptocointracker.cryptoCoinOverview
 
 import android.annotation.SuppressLint
+import android.arch.paging.PagedListAdapter
 import android.support.v4.content.ContextCompat
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -16,18 +18,20 @@ import java.text.NumberFormat
  * @since 5-12-17
  */
 class CryptoCoinsAdapter(clickHandler: OnClickHandler)
-    : RecyclerView.Adapter<CryptoCoinsAdapter.CryptoCoinViewHolder>() {
+    : PagedListAdapter<CryptoCoin, CryptoCoinsAdapter.CryptoCoinViewHolder>(DIFF_CALLBACK) {
 
-    private var mItems = ArrayList<CryptoCoin>()
-    private var mFilteredItems = ArrayList<CryptoCoin>()
+    //private var mFilteredItems = ArrayList<CryptoCoin>()
     private var mClickHandler = clickHandler
 
-    override fun getItemCount(): Int = mFilteredItems.size
+    //override fun getItemCount(): Int = mFilteredItems.size
 
     override fun onBindViewHolder(holder: CryptoCoinViewHolder, position: Int) {
-        val coin = mFilteredItems[position]
+        val cryptoCoin = getItem(position)
         holder.resetViews()
-        holder.bindCryptoCoin(coin)
+
+        if (cryptoCoin != null) {
+            holder.bindCryptoCoin(cryptoCoin)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CryptoCoinViewHolder {
@@ -38,27 +42,21 @@ class CryptoCoinsAdapter(clickHandler: OnClickHandler)
         return CryptoCoinViewHolder(view)
     }
 
-    fun setItems(cryptoCoinList: List<CryptoCoin>) {
-        mItems = ArrayList(cryptoCoinList)
-        mFilteredItems = ArrayList(cryptoCoinList)
-        notifyDataSetChanged()
-    }
-
-    fun filter(filter: String?) {
+    /*fun filter(filter: String?) {
         if (filter == null || filter == "") {
             mFilteredItems = ArrayList(mItems)
             notifyDataSetChanged()
             return
         }
         mFilteredItems.clear()
-        for (cryptoCoin in mItems) {
-            if (cryptoCoin.short.contains(filter, true)
-                    || cryptoCoin.long.contains(filter, true)) {
+        for (cryptoCoin in ) {
+            if (cryptoCoin.shortName.contains(filter, true)
+                    || cryptoCoin.longName.contains(filter, true)) {
                 mFilteredItems.add(cryptoCoin)
             }
         }
         notifyDataSetChanged()
-    }
+    }*/
 
     interface OnClickHandler {
         fun onClick(cryptoCoin: CryptoCoin)
@@ -72,14 +70,14 @@ class CryptoCoinsAdapter(clickHandler: OnClickHandler)
         private val percentage24h = itemView.tv_percent_change_24h
 
         override fun onClick(view: View?) {
-            mClickHandler.onClick(mItems[adapterPosition])
+            mClickHandler.onClick(getItem(adapterPosition)!!)
         }
 
         fun bindCryptoCoin(coin: CryptoCoin) {
             rank.text = (adapterPosition + 1).toString()
             icon.setCoin(coin)
             //rank.text = coin.rank.toString()
-            name.text = itemView.context.getString(R.string.cryptocoin_name_format, coin.long, coin.short)
+            name.text = itemView.context.getString(R.string.cryptocoin_name_format, coin.longName, coin.shortName)
             val formattedPrice = NumberFormat.getNumberInstance().format(coin.price)
             priceUsd.text = itemView.context.getString(R.string.price_usd_format, formattedPrice)
             bindPercentageChanges(coin)
@@ -111,6 +109,18 @@ class CryptoCoinsAdapter(clickHandler: OnClickHandler)
             name.text = ""
             priceUsd.text= ""
             percentage24h.text = ""
+        }
+    }
+
+    companion object {
+        val DIFF_CALLBACK: DiffUtil.ItemCallback<CryptoCoin> = object: DiffUtil.ItemCallback<CryptoCoin>() {
+            override fun areItemsTheSame(oldItem: CryptoCoin, newItem: CryptoCoin): Boolean {
+                return oldItem.shortName == newItem.shortName
+            }
+
+            override fun areContentsTheSame(oldItem: CryptoCoin?, newItem: CryptoCoin?): Boolean {
+                return oldItem == newItem
+            }
         }
     }
 }

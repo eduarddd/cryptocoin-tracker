@@ -2,21 +2,21 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "f37ebf5d7f034c02e89f87e01faeae92",
+    "identityHash": "042603ba25d3372b57fce9e9aabb2bec",
     "entities": [
       {
         "tableName": "CryptoCoin",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `long` TEXT NOT NULL, `price` REAL NOT NULL, `market_cap` REAL NOT NULL, `supply` REAL NOT NULL, `cap24hrChange` REAL NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `long_name` TEXT NOT NULL, `price` REAL NOT NULL, `market_cap` REAL NOT NULL, `supply` REAL NOT NULL, `cap24hrChange` REAL NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
-            "fieldPath": "short",
+            "fieldPath": "shortName",
             "columnName": "id",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "long",
-            "columnName": "long",
+            "fieldPath": "longName",
+            "columnName": "long_name",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -104,7 +104,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"f37ebf5d7f034c02e89f87e01faeae92\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"042603ba25d3372b57fce9e9aabb2bec\")"
     ]
   }
 }
