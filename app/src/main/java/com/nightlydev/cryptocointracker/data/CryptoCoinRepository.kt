@@ -2,10 +2,7 @@ package com.nightlydev.cryptocointracker.data
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
-import android.arch.paging.LivePagedListBuilder
-import android.arch.paging.PagedList
 import com.nightlydev.cryptocointracker.App
-import com.nightlydev.cryptocointracker.data.db.CryptoCoinDao
 import com.nightlydev.cryptocointracker.data.response.CryptoCoinHistoryPriceItem
 import com.nightlydev.cryptocointracker.data.response.CryptoCoinHistoryResponse
 import com.nightlydev.cryptocointracker.data.response.priceHistory
@@ -25,12 +22,11 @@ class CryptoCoinRepository {
     private val cryptoCoinDao = App.cryptoCoinDatabase?.cryptoCoinDao()
     private val favoriteCryptoCoinDao = App.cryptoCoinDatabase?.favoriteCryptoCoinDao()
 
-    fun getAllCryptoCoins() : LiveData<PagedList<CryptoCoin>> {
-        return LivePagedListBuilder<Int, CryptoCoin>(cryptoCoinDao?.getAllCryptoCoins()!!, 20
-        ).build()
+    fun getAllCryptoCoins() : LiveData<List<CryptoCoin>>? {
+        return cryptoCoinDao?.getAllCryptoCoins()
     }
 
-    fun getCryptocoins() : LiveData<Resource<List<CryptoCoin>?>> {
+    fun getCryptoCoins() : LiveData<Resource<List<CryptoCoin>?>> {
         return object : NetworkBoundResource<List<CryptoCoin>, List<CryptoCoin>>() {
             override fun saveCallResult(item: List<CryptoCoin>) {
                 cryptoCoinDao!!.updateCryptoCoins(item)

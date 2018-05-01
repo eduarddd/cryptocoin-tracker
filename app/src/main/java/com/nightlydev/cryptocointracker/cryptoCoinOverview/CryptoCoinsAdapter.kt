@@ -1,13 +1,13 @@
 package com.nightlydev.cryptocointracker.cryptoCoinOverview
 
 import android.annotation.SuppressLint
-import android.arch.paging.PagedListAdapter
 import android.support.v4.content.ContextCompat
-import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import com.nightlydev.cryptocointracker.R
 import com.nightlydev.cryptocointracker.model.CryptoCoin
 import kotlinx.android.synthetic.main.item_crypto_coin.view.*
@@ -18,20 +18,31 @@ import java.text.NumberFormat
  * @since 5-12-17
  */
 class CryptoCoinsAdapter(clickHandler: OnClickHandler)
-    : PagedListAdapter<CryptoCoin, CryptoCoinsAdapter.CryptoCoinViewHolder>(DIFF_CALLBACK) {
+    : RecyclerView.Adapter<CryptoCoinsAdapter.CryptoCoinViewHolder>(),
+        Filterable {
 
-    //private var mFilteredItems = ArrayList<CryptoCoin>()
+    private var mItems = ArrayList<CryptoCoin>()
+    private var mFilteredItems = ArrayList<CryptoCoin>()
     private var mClickHandler = clickHandler
 
-    //override fun getItemCount(): Int = mFilteredItems.size
+    override fun getItemCount(): Int = mFilteredItems.size
+
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            override fun performFiltering(query: CharSequence?): FilterResults {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+        }
+    }
 
     override fun onBindViewHolder(holder: CryptoCoinViewHolder, position: Int) {
-        val cryptoCoin = getItem(position)
+        val coin = mFilteredItems[position]
         holder.resetViews()
-
-        if (cryptoCoin != null) {
-            holder.bindCryptoCoin(cryptoCoin)
-        }
+        holder.bindCryptoCoin(coin)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CryptoCoinViewHolder {
@@ -42,21 +53,30 @@ class CryptoCoinsAdapter(clickHandler: OnClickHandler)
         return CryptoCoinViewHolder(view)
     }
 
-    /*fun filter(filter: String?) {
+    fun setItems(cryptoCoinList: List<CryptoCoin>?) {
+        if (cryptoCoinList != null) {
+            mItems = ArrayList(cryptoCoinList)
+        }
+
+        mFilteredItems = ArrayList(cryptoCoinList)
+        notifyDataSetChanged()
+    }
+
+    fun filter(filter: String?) {
         if (filter == null || filter == "") {
             mFilteredItems = ArrayList(mItems)
             notifyDataSetChanged()
             return
         }
         mFilteredItems.clear()
-        for (cryptoCoin in ) {
+        for (cryptoCoin in mItems) {
             if (cryptoCoin.shortName.contains(filter, true)
                     || cryptoCoin.longName.contains(filter, true)) {
                 mFilteredItems.add(cryptoCoin)
             }
         }
         notifyDataSetChanged()
-    }*/
+    }
 
     interface OnClickHandler {
         fun onClick(cryptoCoin: CryptoCoin)
@@ -70,7 +90,7 @@ class CryptoCoinsAdapter(clickHandler: OnClickHandler)
         private val percentage24h = itemView.tv_percent_change_24h
 
         override fun onClick(view: View?) {
-            mClickHandler.onClick(getItem(adapterPosition)!!)
+            mClickHandler.onClick(mItems[adapterPosition])
         }
 
         fun bindCryptoCoin(coin: CryptoCoin) {
@@ -109,18 +129,6 @@ class CryptoCoinsAdapter(clickHandler: OnClickHandler)
             name.text = ""
             priceUsd.text= ""
             percentage24h.text = ""
-        }
-    }
-
-    companion object {
-        val DIFF_CALLBACK: DiffUtil.ItemCallback<CryptoCoin> = object: DiffUtil.ItemCallback<CryptoCoin>() {
-            override fun areItemsTheSame(oldItem: CryptoCoin, newItem: CryptoCoin): Boolean {
-                return oldItem.shortName == newItem.shortName
-            }
-
-            override fun areContentsTheSame(oldItem: CryptoCoin?, newItem: CryptoCoin?): Boolean {
-                return oldItem == newItem
-            }
         }
     }
 }

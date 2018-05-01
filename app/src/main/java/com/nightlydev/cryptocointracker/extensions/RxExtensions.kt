@@ -10,14 +10,9 @@ import io.reactivex.schedulers.Schedulers
 /**
  * Created by edu on 10-3-18.
  */
-fun <T> Observable<T>.observeAndSubscribeOn(): Observable<T> {
-    return observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
-}
-
-fun <T> Single<T>.observeAndSubscribeOn(): Single<T> {
-    return observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
-}
 
 fun <T> Observable<T>.apiSubscribe(observer: Observer<in T>) {
-    observeAndSubscribeOn().subscribe(observer)
+    this.observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe(observer)
 }

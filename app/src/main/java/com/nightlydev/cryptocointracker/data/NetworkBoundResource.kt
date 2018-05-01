@@ -7,8 +7,10 @@ import android.support.annotation.WorkerThread
 import com.nightlydev.cryptocointracker.extensions.apiSubscribe
 
 import io.reactivex.Observable
+import io.reactivex.Observer
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
 /**
@@ -43,24 +45,27 @@ abstract class NetworkBoundResource<ResultType, RequestType> @MainThread constru
         // we re-attach dbSource as a new source, it will dispatch its latest value quickly
         result.addSource(dbSource) { result.setValue(Resource.loading()) }
 
-        observable
-                ?.observeOn(AndroidSchedulers.mainThread())
-                ?.subscribeOn(Schedulers.io())
-                ?.subscribe({ response ->
-                    result.removeSource(dbSource)
-                    response.apply {
-                        processResponse(this)?.let { requestType -> {
-                            Single.fromCallable {
-                                saveCallResult(requestType)
-                            }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe()
+        observable?.apiSubscribe(object : Observer<RequestType> {
+                    override fun onNext(response: RequestType) {
+                        result.removeSource(dbSource)
+                        response.apply {
+                            processResponse(this)?.let { requestType -> {
+                                Single.fromCallable {
+                                    saveCallResult(requestType)
+                                }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe()
 
-                        } }
-                        result.addSource(loadFromDb()) { newData -> setValue(Resource.success(newData)) }
+                            } }
+                            result.addSource(loadFromDb()) { newData -> setValue(Resource.success(newData)) }
+                        }
                     }
-                },{ error ->
-                    error.printStackTrace()
-                    onFetchFailed()
-                    result.addSource(dbSource) { result.setValue(Resource.error(error.message)) }
+
+                    override fun onError(error: Throwable) {
+                        error.printStackTrace()
+                        onFetchFailed()
+                        result.addSource(dbSource) { result.setValue(Resource.error(error.message)) }
+                    }
+                    override fun onComplete() {}
+                    override fun onSubscribe(d: Disposable?) {}
                 })
     }
 
