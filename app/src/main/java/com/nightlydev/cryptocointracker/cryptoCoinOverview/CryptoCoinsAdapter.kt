@@ -3,6 +3,7 @@ package com.nightlydev.cryptocointracker.cryptoCoinOverview
 import android.annotation.SuppressLint
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,30 +18,47 @@ import java.text.NumberFormat
  * @author edu (edusevilla90@gmail.com)
  * @since 5-12-17
  */
-class CryptoCoinsAdapter(clickHandler: OnClickHandler)
+class CryptoCoinsAdapter
     : RecyclerView.Adapter<CryptoCoinsAdapter.CryptoCoinViewHolder>(),
         Filterable {
 
-    private var mItems = ArrayList<CryptoCoin>()
-    private var mFilteredItems = ArrayList<CryptoCoin>()
-    private var mClickHandler = clickHandler
+    var cryptoCoins = ArrayList<CryptoCoin>()
+        set(value) {
+            field = value
+            mItems = value
+            notifyDataSetChanged()
+        }
 
-    override fun getItemCount(): Int = mFilteredItems.size
+    private var mItems = ArrayList<CryptoCoin>()
+    var clickHandler: ((CryptoCoin) -> Unit)? = null
+
+    override fun getItemCount(): Int = mItems.size
 
     override fun getFilter(): Filter {
         return object : Filter() {
             override fun performFiltering(query: CharSequence?): FilterResults {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                val filteredData: ArrayList<CryptoCoin> = filterCryptoCoins(query?.toString())
+
+                return FilterResults().apply {
+                    values = filteredData
+                    count = filteredData.size
+                }
             }
 
+            @Suppress("UNCHECKED_CAST")
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                if (results != null && results.count > 0) {
+                    mItems = results.values as ArrayList<CryptoCoin>
+                    notifyDataSetChanged()
+                } else {
+                    notifyDataSetChanged()
+                }
             }
         }
     }
 
     override fun onBindViewHolder(holder: CryptoCoinViewHolder, position: Int) {
-        val coin = mFilteredItems[position]
+        val coin = mItems[position]
         holder.resetViews()
         holder.bindCryptoCoin(coin)
     }
@@ -53,33 +71,18 @@ class CryptoCoinsAdapter(clickHandler: OnClickHandler)
         return CryptoCoinViewHolder(view)
     }
 
-    fun setItems(cryptoCoinList: List<CryptoCoin>?) {
-        if (cryptoCoinList != null) {
-            mItems = ArrayList(cryptoCoinList)
-        }
+    private fun filterCryptoCoins(filter: String?): ArrayList<CryptoCoin> {
+        val result = ArrayList<CryptoCoin>()
 
-        mFilteredItems = ArrayList(cryptoCoinList)
-        notifyDataSetChanged()
-    }
+        if (TextUtils.isEmpty(filter)) return cryptoCoins
 
-    fun filter(filter: String?) {
-        if (filter == null || filter == "") {
-            mFilteredItems = ArrayList(mItems)
-            notifyDataSetChanged()
-            return
-        }
-        mFilteredItems.clear()
-        for (cryptoCoin in mItems) {
-            if (cryptoCoin.shortName.contains(filter, true)
+        cryptoCoins.forEach {cryptoCoin ->
+            if (cryptoCoin.shortName.contains(filter!!, true)
                     || cryptoCoin.longName.contains(filter, true)) {
-                mFilteredItems.add(cryptoCoin)
+                result.add(cryptoCoin)
             }
         }
-        notifyDataSetChanged()
-    }
-
-    interface OnClickHandler {
-        fun onClick(cryptoCoin: CryptoCoin)
+        return result
     }
 
     inner class CryptoCoinViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
@@ -90,7 +93,7 @@ class CryptoCoinsAdapter(clickHandler: OnClickHandler)
         private val percentage24h = itemView.tv_percent_change_24h
 
         override fun onClick(view: View?) {
-            mClickHandler.onClick(mItems[adapterPosition])
+            clickHandler?.invoke(mItems[adapterPosition])
         }
 
         fun bindCryptoCoin(coin: CryptoCoin) {

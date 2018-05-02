@@ -15,7 +15,7 @@ import java.util.*
  */
 class OverviewViewModel : ViewModel() {
     val cryptoCoinList : LiveData<Resource<List<CryptoCoin>?>>
-    private val mSearchQuery = MutableLiveData<String>()
+    val searchQuery = MutableLiveData<String>()
     private val repository = CryptoCoinRepository()
     private val refreshTime : MutableLiveData<Calendar> = MutableLiveData()
 
@@ -27,5 +27,4 @@ class OverviewViewModel : ViewModel() {
     fun refreshCryptoCoinList() {
         refreshTime.value = Calendar.getInstance()
     }
-    fun getSearchQuery() = mSearchQuery
 }

@@ -48,24 +48,29 @@ abstract class NetworkBoundResource<ResultType, RequestType> @MainThread constru
         observable?.apiSubscribe(object : Observer<RequestType> {
                     override fun onNext(response: RequestType) {
                         result.removeSource(dbSource)
-                        response.apply {
-                            processResponse(this)?.let { requestType -> {
-                                Single.fromCallable {
-                                    saveCallResult(requestType)
-                                }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe()
-
-                            } }
-                            result.addSource(loadFromDb()) { newData -> setValue(Resource.success(newData)) }
-                        }
+                        saveResultAndReInit(response)
                     }
 
                     override fun onError(error: Throwable) {
                         error.printStackTrace()
                         onFetchFailed()
-                        result.addSource(dbSource) { result.setValue(Resource.error(error.message)) }
+                        result.addSource(dbSource) { setValue(Resource.error(error.message)) }
                     }
                     override fun onComplete() {}
                     override fun onSubscribe(d: Disposable?) {}
+                })
+    }
+
+    private fun saveResultAndReInit(response: RequestType) {
+        Single.fromCallable {
+            saveCallResult(response)
+        }.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    result.addSource(loadFromDb()) { newData ->
+                        setValue(Resource.success(newData)) }
+                }, {
+                    error -> error.printStackTrace()
                 })
     }
 
@@ -90,11 +95,6 @@ abstract class NetworkBoundResource<ResultType, RequestType> @MainThread constru
 
     fun asLiveData(): LiveData<Resource<ResultType?>> {
         return result
-    }
-
-    @WorkerThread
-    private fun processResponse(response: RequestType): RequestType? {
-        return response
     }
 }
 

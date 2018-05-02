@@ -30,20 +30,6 @@ import java.util.*
  * @since 15-12-17
  */
 class CryptoCoinDetailActivity: AppCompatActivity(), View.OnClickListener {
-    companion object {
-        val EXTRA_CRYPTO_COIN_ID = "CRYPTO_COIN_ID"
-        val STATE_CRYPTO_COIN_ID = "CRYPTO_COIN_ID"
-        val STATE_PERIOD = "STATE_PERIOD"
-        val ALPHA = 40
-        val DAY = 1
-        val WEEK = 7
-        val MONTH = 30
-        val QUARTER_YEAR = 90
-        val HALF_YEAR = 180
-        val YEAR = 365
-        val ALL = -1
-        val DEFAULT_PERIOD  = DAY
-    }
 
     private var mCryptoCoinViewModel: CryptoCoinViewModel? = null
 
@@ -264,5 +250,20 @@ class CryptoCoinDetailActivity: AppCompatActivity(), View.OnClickListener {
         bt_one_year.setTextColor(ContextCompat.getColor(this, R.color.white))
         bt_all.setTextColor(ContextCompat.getColor(this, R.color.white))
         (v as TextView).setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
+    }
+
+    companion object {
+        const val EXTRA_CRYPTO_COIN_ID = "CRYPTO_COIN_ID"
+        const val STATE_CRYPTO_COIN_ID = "CRYPTO_COIN_ID"
+        const val STATE_PERIOD = "STATE_PERIOD"
+        const val ALPHA = 40
+        const val DAY = 1
+        const val WEEK = 7
+        const val MONTH = 30
+        const val QUARTER_YEAR = 90
+        const val HALF_YEAR = 180
+        const val YEAR = 365
+        const val ALL = -1
+        const val DEFAULT_PERIOD  = DAY
     }
 }

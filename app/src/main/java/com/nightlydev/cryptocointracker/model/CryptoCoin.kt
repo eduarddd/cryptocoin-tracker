@@ -31,10 +31,10 @@ import java.io.Serializable
 @Entity
 data class CryptoCoin(@PrimaryKey @ColumnInfo(name = "id") @SerializedName("short") var shortName: String,
                       @ColumnInfo(name = "long_name") @SerializedName("long") var longName: String,
-                      var price: Double,
-                      @ColumnInfo(name = "market_cap") var mktcap: Double,
-                      var supply: Double,
-                      var cap24hrChange: Double) : Serializable {
+                      @SerializedName("price") var price: Double,
+                      @ColumnInfo(name = "market_cap") @SerializedName("mktcap") var mktcap: Double,
+                      @SerializedName("supply") var supply: Double,
+                      @SerializedName("cap24hrChange") var cap24hrChange: Double) : Serializable {
 
     constructor() : this("", "", 0.0, 0.0, 0.0, 0.0)
 }

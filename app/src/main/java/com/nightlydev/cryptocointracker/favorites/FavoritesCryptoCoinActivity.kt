@@ -20,10 +20,9 @@ import kotlinx.android.synthetic.main.toolbar_top.*
  * @since 16-1-18
  */
 class FavoritesCryptoCoinActivity : AppCompatActivity(),
-        SwipeRefreshLayout.OnRefreshListener,
-        CryptoCoinsAdapter.OnClickHandler {
+        SwipeRefreshLayout.OnRefreshListener {
 
-    private var mAdapter = CryptoCoinsAdapter(this@FavoritesCryptoCoinActivity)
+    private lateinit var mAdapter : CryptoCoinsAdapter
     private var mFavoritesViewModel : FavoritesViewModel? = null
 
 
@@ -57,6 +56,8 @@ class FavoritesCryptoCoinActivity : AppCompatActivity(),
         with(swipe_refresh_layout) {
             setOnRefreshListener(this@FavoritesCryptoCoinActivity)
         }
+        mAdapter = CryptoCoinsAdapter()
+        mAdapter.clickHandler = { cryptoCoin -> startCryptoCoinDetailActivity(cryptoCoin) }
         with(rv_crypto_coins_overview) {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(this@FavoritesCryptoCoinActivity)
@@ -67,10 +68,6 @@ class FavoritesCryptoCoinActivity : AppCompatActivity(),
 
     override fun onRefresh() {
         mFavoritesViewModel?.refreshCryptoCoinList()
-    }
-
-    override fun onClick(cryptoCoin: CryptoCoin) {
-        startCryptoCoinDetailActivity(cryptoCoin)
     }
 
     private fun startCryptoCoinDetailActivity(cryptoCoin: CryptoCoin) {
