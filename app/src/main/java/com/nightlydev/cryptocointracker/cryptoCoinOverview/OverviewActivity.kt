@@ -121,7 +121,7 @@ class OverviewActivity : AppCompatActivity() {
 
     private fun startCryptoCoinDetailActivity(cryptoCoin: CryptoCoin) {
         val intent = Intent(this, CryptoCoinDetailActivity::class.java).apply {
-            putExtra(EXTRA_CRYPTO_COIN_ID, cryptoCoin.shortName)
+            putExtra(EXTRA_CRYPTO_COIN_ID, cryptoCoin.symbol)
         }
         startActivity(intent)
     }

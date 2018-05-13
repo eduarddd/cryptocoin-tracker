@@ -95,7 +95,7 @@ class CryptoCoinRepository {
 
     fun saveFavorite(cryptoCoin: CryptoCoin?) {
         val favorite = FavoriteCryptoCoin()
-        favorite.cryptoCoinId = cryptoCoin!!.shortName
+        favorite.cryptoCoinId = cryptoCoin!!.symbol
         Single.fromCallable {
             favoriteCryptoCoinDao?.insert(favorite)
         }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe()
@@ -103,7 +103,7 @@ class CryptoCoinRepository {
 
     fun removeFavorite(cryptoCoin: CryptoCoin) {
         Single.fromCallable {
-            favoriteCryptoCoinDao?.delete(cryptoCoin.shortName)
+            favoriteCryptoCoinDao?.delete(cryptoCoin.symbol)
         }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe()
     }
 }

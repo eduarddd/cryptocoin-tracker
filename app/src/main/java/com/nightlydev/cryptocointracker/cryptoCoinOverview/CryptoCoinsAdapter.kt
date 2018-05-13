@@ -77,8 +77,8 @@ class CryptoCoinsAdapter
         if (TextUtils.isEmpty(filter)) return cryptoCoins
 
         cryptoCoins.forEach {cryptoCoin ->
-            if (cryptoCoin.shortName.contains(filter!!, true)
-                    || cryptoCoin.longName.contains(filter, true)) {
+            if (cryptoCoin.symbol.contains(filter!!, true)
+                    || cryptoCoin.name.contains(filter, true)) {
                 result.add(cryptoCoin)
             }
         }
@@ -100,7 +100,7 @@ class CryptoCoinsAdapter
             rank.text = (adapterPosition + 1).toString()
             icon.setCoin(coin)
             //rank.text = coin.rank.toString()
-            name.text = itemView.context.getString(R.string.cryptocoin_name_format, coin.longName, coin.shortName)
+            name.text = itemView.context.getString(R.string.cryptocoin_name_format, coin.name, coin.symbol)
             val formattedPrice = NumberFormat.getNumberInstance().format(coin.price)
             priceUsd.text = itemView.context.getString(R.string.price_usd_format, formattedPrice)
             bindPercentageChanges(coin)

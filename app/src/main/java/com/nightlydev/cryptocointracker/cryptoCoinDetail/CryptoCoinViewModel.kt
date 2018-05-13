@@ -41,7 +41,7 @@ class CryptoCoinViewModel(cryptoCoinId: String, displayHistoryPeriod: Int) : Vie
     fun getCryptoCoinHistory() : LiveData<List<CryptoCoinHistoryPriceItem>?> {
         if (mCryptoCoinHistory == null) {
             mCryptoCoinHistory = Transformations.switchMap(mDisplayHistoryPeriod) {
-                period -> repository.getCryptoCoinPriceHistory(period, mCryptoCoin.value!!.shortName)
+                period -> repository.getCryptoCoinPriceHistory(period, mCryptoCoin.value!!.symbol)
             }
         }
         return mCryptoCoinHistory!!
