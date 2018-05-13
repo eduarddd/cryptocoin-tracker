@@ -8,4 +8,10 @@
         android:icon="@drawable/ic_star_white_24dp"
         app:showAsAction="always"/>
 
+    <item
+        android:id="@+id/action_add_alert"
+        android:title="Add alert"
+        android:icon="@drawable/ic_add_alert_white_24dp"
+        app:showAsAction="always"/>
+
 </menu>

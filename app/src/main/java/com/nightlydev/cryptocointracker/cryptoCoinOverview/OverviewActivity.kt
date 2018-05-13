@@ -12,7 +12,7 @@ import android.view.Menu
 import android.view.MenuItem
 import com.nightlydev.cryptocointracker.R
 import com.nightlydev.cryptocointracker.cryptoCoinDetail.CryptoCoinDetailActivity
-import com.nightlydev.cryptocointracker.cryptoCoinDetail.CryptoCoinDetailActivity.Companion.EXTRA_CRYPTO_COIN_ID
+import com.nightlydev.cryptocointracker.cryptoCoinDetail.EXTRA_CRYPTO_COIN_ID
 import com.nightlydev.cryptocointracker.data.Status
 import com.nightlydev.cryptocointracker.favorites.FavoritesCryptoCoinActivity
 import com.nightlydev.cryptocointracker.model.CryptoCoin

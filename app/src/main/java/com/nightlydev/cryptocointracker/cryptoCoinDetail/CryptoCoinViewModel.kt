@@ -1,11 +1,12 @@
 package com.nightlydev.cryptocointracker.cryptoCoinDetail
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Transformations
-import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.*
+import com.google.firebase.database.FirebaseDatabase
 import com.nightlydev.cryptocointracker.data.CryptoCoinRepository
+import com.nightlydev.cryptocointracker.data.Resource
+import com.nightlydev.cryptocointracker.data.Status
 import com.nightlydev.cryptocointracker.data.response.CryptoCoinHistoryPriceItem
+import com.nightlydev.cryptocointracker.model.Alert
 import com.nightlydev.cryptocointracker.model.CryptoCoin
 
 /**
@@ -13,45 +14,56 @@ import com.nightlydev.cryptocointracker.model.CryptoCoin
  * @since 11-1-18
  */
 class CryptoCoinViewModel(cryptoCoinId: String, displayHistoryPeriod: Int) : ViewModel() {
-    private var mCryptoCoinId = MutableLiveData<String>()
-    private var mCryptoCoin : LiveData<CryptoCoin>
-    private var mDisplayHistoryPeriod : MutableLiveData<Int>
-    private var mCryptoCoinHistory : LiveData<List<CryptoCoinHistoryPriceItem>?>? = null
     private val repository = CryptoCoinRepository()
-    private var mIsFavorite : LiveData<Boolean>
+    private var cryptoCoinId = MutableLiveData<String>()
+    var cryptoCoin : LiveData<CryptoCoin>
+    var displayHistoryPeriod = MutableLiveData<Int>()
+    var cryptoCoinHistory = MediatorLiveData<Resource<List<CryptoCoinHistoryPriceItem>?>>()
+    var isFavorite : LiveData<Boolean>
 
     init {
-        mCryptoCoinId.value = cryptoCoinId
-        mCryptoCoin = Transformations.switchMap(mCryptoCoinId) {
+        this.cryptoCoinId.value = cryptoCoinId
+        this.displayHistoryPeriod.value = displayHistoryPeriod
+
+        cryptoCoin = Transformations.switchMap(this.cryptoCoinId) {
             id -> repository.getCryptoCoin(id)
         }
-
-        mDisplayHistoryPeriod = MutableLiveData()
-        mDisplayHistoryPeriod.value = displayHistoryPeriod
-
-        mIsFavorite = Transformations.map(repository.getFavorites()!!) {
-            favorites -> (favorites.contains(mCryptoCoin.value))
+        cryptoCoinHistory.addSource(this.cryptoCoin) { _ ->
+            cryptoCoinHistory.addSource(this.displayHistoryPeriod) { _ ->
+                val cryptoCoinHistorySource = getCryptoCoinHistorySource()
+                cryptoCoinHistory.addSource(cryptoCoinHistorySource) { history ->
+                    cryptoCoinHistory.value = history
+                    when (history?.status) {
+                        Status.SUCCESS, Status.ERROR -> cryptoCoinHistory.removeSource(cryptoCoinHistorySource)
+                        else -> {} //ignore
+                    }
+                }
+            }
+        }
+        isFavorite = Transformations.map(repository.getFavorites()!!) {
+            favorites -> (favorites.contains(cryptoCoin.value))
         }
     }
 
-    fun isFavorite() = mIsFavorite
-    fun getCryptoCoin() = mCryptoCoin
-    fun getDisplayHistoryPeriod() = mDisplayHistoryPeriod
-
-    fun getCryptoCoinHistory() : LiveData<List<CryptoCoinHistoryPriceItem>?> {
-        if (mCryptoCoinHistory == null) {
-            mCryptoCoinHistory = Transformations.switchMap(mDisplayHistoryPeriod) {
-                period -> repository.getCryptoCoinPriceHistory(period, mCryptoCoin.value!!.symbol)
-            }
-        }
-        return mCryptoCoinHistory!!
+    private fun getCryptoCoinHistorySource(): LiveData<Resource<List<CryptoCoinHistoryPriceItem>?>> {
+        return repository.getCryptoCoinPriceHistory(displayHistoryPeriod.value!!, cryptoCoin.value!!.symbol)
     }
 
     fun saveFavorite() {
-        if (!mIsFavorite.value!!) {
-            repository.saveFavorite(mCryptoCoin.value)
+        if (!isFavorite.value!!) {
+            repository.saveFavorite(cryptoCoin.value)
         } else {
-            repository.removeFavorite(mCryptoCoin.value!!)
+            repository.removeFavorite(cryptoCoin.value!!)
         }
+    }
+
+    fun createAlert(cryptoCoin: CryptoCoin,
+                    price: Double,
+                    note: String = "",
+                    persistent: Boolean = false) {
+        val alert = Alert(cryptoCoin, price, note, persistent)
+
+        val dbRef = FirebaseDatabase.getInstance().reference
+        dbRef.child("alerts").push().setValue(alert)
     }
 }

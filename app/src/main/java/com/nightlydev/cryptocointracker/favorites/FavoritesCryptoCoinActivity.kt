@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import com.nightlydev.cryptocointracker.R
 import com.nightlydev.cryptocointracker.cryptoCoinDetail.CryptoCoinDetailActivity
+import com.nightlydev.cryptocointracker.cryptoCoinDetail.EXTRA_CRYPTO_COIN_ID
 import com.nightlydev.cryptocointracker.cryptoCoinOverview.CryptoCoinsAdapter
 import com.nightlydev.cryptocointracker.model.CryptoCoin
 import com.nightlydev.cryptocointracker.ui.DividerItemDecoration
@@ -72,7 +73,7 @@ class FavoritesCryptoCoinActivity : AppCompatActivity(),
 
     private fun startCryptoCoinDetailActivity(cryptoCoin: CryptoCoin) {
         val intent = Intent(this, CryptoCoinDetailActivity::class.java)
-        intent.putExtra(CryptoCoinDetailActivity.EXTRA_CRYPTO_COIN_ID, cryptoCoin.symbol)
+        intent.putExtra(EXTRA_CRYPTO_COIN_ID, cryptoCoin.symbol)
         startActivity(intent)
     }
 }

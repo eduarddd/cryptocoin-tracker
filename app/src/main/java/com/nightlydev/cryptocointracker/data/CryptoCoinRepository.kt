@@ -1,10 +1,10 @@
 package com.nightlydev.cryptocointracker.data
 
+import android.annotation.SuppressLint
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import com.nightlydev.cryptocointracker.App
 import com.nightlydev.cryptocointracker.data.response.CryptoCoinHistoryPriceItem
-import com.nightlydev.cryptocointracker.data.response.CryptoCoinHistoryResponse
 import com.nightlydev.cryptocointracker.data.response.priceHistory
 import com.nightlydev.cryptocointracker.model.CryptoCoin
 import com.nightlydev.cryptocointracker.model.FavoriteCryptoCoin
@@ -17,6 +17,7 @@ import io.reactivex.schedulers.Schedulers
  * @author edu (edusevilla90@gmail.com)
  * @since 5-12-17
  */
+@SuppressLint("CheckResult")
 class CryptoCoinRepository {
     private val cryptoCoinService: CryptoCoinService = CryptoCoinService.create()
     private val cryptoCoinDao = App.cryptoCoinDatabase?.cryptoCoinDao()
@@ -65,30 +66,28 @@ class CryptoCoinRepository {
         }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe()
     }
 
-    fun getCryptoCoin(cryptoCoinId: String) =
-            cryptoCoinDao?.getCryptoCoin(cryptoCoinId = cryptoCoinId)!!
+    fun getCryptoCoin(cryptoCoinId: String) = cryptoCoinDao?.getCryptoCoin(cryptoCoinId = cryptoCoinId)
 
-    fun getFavorites() : LiveData<List<CryptoCoin>>? =
-            favoriteCryptoCoinDao?.getFavorites()
+    fun getFavorites() : LiveData<List<CryptoCoin>>? = favoriteCryptoCoinDao?.getFavorites()
 
     fun getCryptoCoinPriceHistory(dayCount: Int, coinSymbol: String)
-            : LiveData<List<CryptoCoinHistoryPriceItem>?> {
-        val priceHistory = MutableLiveData<List<CryptoCoinHistoryPriceItem>?>()
-        val observable : Observable<CryptoCoinHistoryResponse>
-        if (dayCount > -1) {
-            observable = cryptoCoinService.listCryptoCoinHistory(dayCount, coinSymbol)
+            : LiveData<Resource<List<CryptoCoinHistoryPriceItem>?>> {
+        val priceHistory = MutableLiveData<Resource<List<CryptoCoinHistoryPriceItem>?>>()
+        priceHistory.value = Resource.loading(null)
+        val observable = if (dayCount > -1) {
+            cryptoCoinService.listCryptoCoinHistory(dayCount, coinSymbol)
         }else {
-            observable = cryptoCoinService.listCryptoCoinHistory(coinSymbol)
+            cryptoCoinService.listCryptoCoinHistory(coinSymbol)
         }
         observable
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({
-                    result -> priceHistory.value = result.priceHistory()
+                    result -> priceHistory.value = Resource.success(result.priceHistory())
                 },{
                     error -> run {
                         error.printStackTrace()
-                        priceHistory.value = null
+                        priceHistory.value = Resource.error(message = "Error loading history")
                 }})
         return priceHistory
     }

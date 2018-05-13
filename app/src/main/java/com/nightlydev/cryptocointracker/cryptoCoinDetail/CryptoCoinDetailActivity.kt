@@ -3,18 +3,20 @@ package com.nightlydev.cryptocointracker.cryptoCoinDetail
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.TextView
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import com.jjoe64.graphview.GridLabelRenderer
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
 import com.nightlydev.cryptocointracker.R
+import com.nightlydev.cryptocointracker.alerts.CreateAlertDialogFragment
+import com.nightlydev.cryptocointracker.data.Status
 import com.nightlydev.cryptocointracker.data.ViewModelFactory
 import com.nightlydev.cryptocointracker.data.response.CryptoCoinHistoryPriceItem
 import com.nightlydev.cryptocointracker.model.CryptoCoin
@@ -29,113 +31,88 @@ import java.util.*
  * @author edu (edusevilla90@gmail.com)
  * @since 15-12-17
  */
-class CryptoCoinDetailActivity: AppCompatActivity(), View.OnClickListener {
+class CryptoCoinDetailActivity: AppCompatActivity() {
 
-    private var mCryptoCoinViewModel: CryptoCoinViewModel? = null
+    private lateinit var mCryptoCoinViewModel: CryptoCoinViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_crypto_coin_detail)
-
         setSupportActionBar(toolbar)
         title = ""
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         initButtons()
-
-        if (savedInstanceState != null) {
-            val cryptoCoinId = savedInstanceState.getString(STATE_CRYPTO_COIN_ID)
-            val period = savedInstanceState.getInt(STATE_PERIOD)
-            initViewModel(cryptoCoinId, period)
-        } else {
-            val cryptoCoinId = intent.getStringExtra(EXTRA_CRYPTO_COIN_ID)
-            val period = DEFAULT_PERIOD
-            initViewModel(cryptoCoinId, period)
-        }
+        initViewModel(savedInstanceState)
     }
 
-    private fun initViewModel(cryptoCoinId: String, period: Int) {
+    private fun initViewModel(savedInstanceState: Bundle?) {
+        val cryptoCoinId = savedInstanceState?.getString(STATE_CRYPTO_COIN_ID)
+                ?: intent.getStringExtra(EXTRA_CRYPTO_COIN_ID)
+        val period = savedInstanceState?.getInt(STATE_PERIOD) ?: DEFAULT_PERIOD
         val viewModelFactory = ViewModelFactory(cryptoCoinId, period)
+
         mCryptoCoinViewModel = ViewModelProviders
                 .of(this, viewModelFactory)
                 .get(CryptoCoinViewModel::class.java)
 
-        mCryptoCoinViewModel
-                ?.getCryptoCoin()
-                ?.observe(this, Observer<CryptoCoin> { coin ->
-                    bindCoinData(coin)
-                    subscribeToCryptoCoinHistory()
-                })
-    }
+        mCryptoCoinViewModel.cryptoCoin.observe(this, Observer { coin ->
+            bindCoinData(coin)
+        })
 
-    private fun subscribeToCryptoCoinHistory() {
-        mCryptoCoinViewModel?.getCryptoCoinHistory()?.observe(
-                this,
-                Observer { priceHistory ->
-                    progress_bar.visibility = View.GONE
-
-                    if (priceHistory != null) {
-                        tv_history_error.visibility = View.GONE
-                        displayPriceHistoryInfo(priceHistory)
-                    }
-                })
+        mCryptoCoinViewModel.cryptoCoinHistory.observe(this, Observer { priceHistory ->
+            progress_bar.visibility = GONE
+            tv_history_error.visibility = GONE
+            when (priceHistory?.status) {
+                Status.LOADING -> progress_bar.visibility = VISIBLE
+                Status.SUCCESS -> displayPriceHistoryInfo(priceHistory.data)
+                Status.ERROR -> tv_history_error.visibility = VISIBLE
+            }
+        })
+        updateButtonColors(period)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_detail, menu)
         setupFavoriteMenuItem(menu.findItem(R.id.action_save_favorite))
-
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.action_save_favorite -> {
-            saveFavorite()
-            true
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_save_favorite -> {
+                saveFavorite()
+                true
+            }
+            R.id.action_add_alert -> {
+                createAlert()
+                true
+            }
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
-        android.R.id.home -> { finish()
-            true
-        }
-        else -> super.onOptionsItemSelected(item)
     }
 
-    override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
-        super.onSaveInstanceState(outState, outPersistentState)
+    private fun createAlert() {
+        if (supportFragmentManager.findFragmentByTag("CREATE_ALERT_FRAGMENT") != null) return
 
-        outState?.putString(STATE_CRYPTO_COIN_ID, mCryptoCoinViewModel?.getCryptoCoin()?.value?.symbol!!)
-        outState?.putInt(STATE_PERIOD, mCryptoCoinViewModel?.getDisplayHistoryPeriod()?.value!!)
+        val fragment = CreateAlertDialogFragment.newInstance(mCryptoCoinViewModel.cryptoCoin.value!!.symbol)
+        fragment.show(supportFragmentManager, "CREATE_ALERT_FRAGMENT")
     }
 
-    private fun saveFavorite() = mCryptoCoinViewModel?.saveFavorite()
+    private fun saveFavorite() = mCryptoCoinViewModel.saveFavorite()
 
     private fun setupFavoriteMenuItem(favoriteMenuItem: MenuItem) {
-        mCryptoCoinViewModel?.isFavorite()?.observe(this, Observer<Boolean> { isFavorite ->
+        mCryptoCoinViewModel.isFavorite.observe(this, Observer<Boolean> { isFavorite ->
             if (isFavorite!!) {
                 favoriteMenuItem.setIcon(R.drawable.ic_star_white_24dp)
             } else {
                 favoriteMenuItem.setIcon(R.drawable.ic_star_border_white_24dp)
             }
         })
-    }
-
-    override fun onClick(v : View?) {
-        var selectedPeriod : Int? = null
-        when(v?.id) {
-            R.id.bt_one_day -> selectedPeriod = DAY
-            R.id.bt_one_week -> selectedPeriod = WEEK
-            R.id.bt_one_month -> selectedPeriod = MONTH
-            R.id.bt_three_month -> selectedPeriod = QUARTER_YEAR
-            R.id.bt_six_month -> selectedPeriod = HALF_YEAR
-            R.id.bt_one_year -> selectedPeriod = YEAR
-            R.id.bt_all -> selectedPeriod = ALL
-        }
-        fetchCryptoCoinHistory(selectedPeriod!!)
-        updateButtonColors(v)
-    }
-
-    private fun fetchCryptoCoinHistory(displayHistoryPeriod: Int) {
-        progress_bar.visibility = View.VISIBLE
-        mCryptoCoinViewModel?.getDisplayHistoryPeriod()?.value = displayHistoryPeriod
     }
 
     private fun displayPriceHistoryInfo(priceHistory: List<CryptoCoinHistoryPriceItem>?) {
@@ -146,7 +123,7 @@ class CryptoCoinDetailActivity: AppCompatActivity(), View.OnClickListener {
 
         series.isDrawBackground = true
 
-        val cryptoCoin = mCryptoCoinViewModel?.getCryptoCoin()?.value
+        val cryptoCoin = mCryptoCoinViewModel.cryptoCoin.value
         val color = cryptoCoin!!.iconColor(this)
         series.color = color
         series.backgroundColor = color and 0x00ffffff or (ALPHA shl 24)
@@ -171,9 +148,7 @@ class CryptoCoinDetailActivity: AppCompatActivity(), View.OnClickListener {
     }
 
     private fun setupGridLabelRenderer(gridLabelRenderer: GridLabelRenderer) {
-        mCryptoCoinViewModel?.getDisplayHistoryPeriod()?.observe(
-                this,
-                Observer<Int> { displayHistoryPeriod ->
+        mCryptoCoinViewModel.displayHistoryPeriod.observe(this, Observer { displayHistoryPeriod ->
                     with(gridLabelRenderer) {
                         isHorizontalLabelsVisible = true
                         isVerticalLabelsVisible = false
@@ -225,36 +200,59 @@ class CryptoCoinDetailActivity: AppCompatActivity(), View.OnClickListener {
         var formattedPercentage = NumberFormat.getNumberInstance().format(percentage)
 
         if (percentage > 0) {
-            formattedPercentage = "+" + formattedPercentage
+            formattedPercentage = "+$formattedPercentage"
         }
         tv_percent_change_24h.text = getString(R.string.perc_change_format, formattedPercentage)
     }
 
     private fun initButtons() {
-        bt_one_day.setOnClickListener(this)
-        bt_one_month.setOnClickListener(this)
-        bt_one_week.setOnClickListener(this)
-        bt_three_month.setOnClickListener(this)
-        bt_six_month.setOnClickListener(this)
-        bt_one_year.setOnClickListener(this)
-        bt_all.setOnClickListener(this)
-        updateButtonColors(bt_one_day)
+        bt_one_day.setOnClickListener { updateSelectedPeriod(DAY) }
+        bt_one_week.setOnClickListener { updateSelectedPeriod(WEEK) }
+        bt_one_month.setOnClickListener { updateSelectedPeriod(MONTH) }
+        bt_three_month.setOnClickListener { updateSelectedPeriod(QUARTER_YEAR) }
+        bt_six_month.setOnClickListener { updateSelectedPeriod(HALF_YEAR) }
+        bt_one_year.setOnClickListener { updateSelectedPeriod(YEAR) }
+        bt_all.setOnClickListener { updateSelectedPeriod(ALL) }
     }
 
-    private fun updateButtonColors(v : View?) {
-        bt_one_day.setTextColor(ContextCompat.getColor(this, R.color.white))
-        bt_one_month.setTextColor(ContextCompat.getColor(this, R.color.white))
-        bt_one_week.setTextColor(ContextCompat.getColor(this, R.color.white))
-        bt_three_month.setTextColor(ContextCompat.getColor(this, R.color.white))
-        bt_six_month.setTextColor(ContextCompat.getColor(this, R.color.white))
-        bt_one_year.setTextColor(ContextCompat.getColor(this, R.color.white))
-        bt_all.setTextColor(ContextCompat.getColor(this, R.color.white))
-        (v as TextView).setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
+    private fun updateSelectedPeriod(newPeriod: Int) {
+        mCryptoCoinViewModel.displayHistoryPeriod.value = newPeriod
+        updateButtonColors(newPeriod)
+    }
+
+    private fun updateButtonColors(selectedPeriod: Int) {
+        val colorSelected = ContextCompat.getColor(this, R.color.colorPrimaryDark)
+        val colorUnselected = ContextCompat.getColor(this, R.color.white)
+
+        bt_one_day.setTextColor(colorUnselected)
+        bt_one_month.setTextColor(colorUnselected)
+        bt_one_week.setTextColor(colorUnselected)
+        bt_three_month.setTextColor(colorUnselected)
+        bt_six_month.setTextColor(colorUnselected)
+        bt_one_year.setTextColor(colorUnselected)
+        bt_all.setTextColor(colorUnselected)
+
+        val selectedButton = when (selectedPeriod) {
+            DAY -> bt_one_day
+            WEEK -> bt_one_week
+            MONTH -> bt_one_month
+            QUARTER_YEAR -> bt_three_month
+            HALF_YEAR -> bt_six_month
+            YEAR -> bt_one_year
+            ALL -> bt_one_year
+            else -> null
+        }
+        selectedButton!!.setTextColor(colorSelected)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        outState.putString(STATE_CRYPTO_COIN_ID, mCryptoCoinViewModel.cryptoCoin.value?.symbol!!)
+        outState.putInt(STATE_PERIOD, mCryptoCoinViewModel.displayHistoryPeriod.value!!)
     }
 
     companion object {
-        const val EXTRA_CRYPTO_COIN_ID = "CRYPTO_COIN_ID"
-        const val STATE_CRYPTO_COIN_ID = "CRYPTO_COIN_ID"
         const val STATE_PERIOD = "STATE_PERIOD"
         const val ALPHA = 40
         const val DAY = 1
@@ -267,3 +265,6 @@ class CryptoCoinDetailActivity: AppCompatActivity(), View.OnClickListener {
         const val DEFAULT_PERIOD  = DAY
     }
 }
+
+const val EXTRA_CRYPTO_COIN_ID = "CRYPTO_COIN_ID"
+const val STATE_CRYPTO_COIN_ID = "CRYPTO_COIN_ID"
