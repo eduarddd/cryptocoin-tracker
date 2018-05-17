@@ -1,36 +1,40 @@
 package com.nightlydev.cryptocointracker.fcm
 
 import android.util.Log
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.iid.FirebaseInstanceIdService
-import com.google.firebase.database.FirebaseDatabase
-
 
 
 /**
  * Created by edu on 1-2-18.
  */
+
 class InstanceIdService : FirebaseInstanceIdService() {
 
     override fun onTokenRefresh() {
         val refreshedToken = FirebaseInstanceId.getInstance().token
-        Log.d(TAG, "Refreshed token: " + refreshedToken)
+        Log.d(TAG, "Refreshed token: $refreshedToken")
 
-        sendTokenToServer(refreshedToken)
+        FirebaseAuth.getInstance().addAuthStateListener { auth ->
+            if (auth.currentUser != null) {
+                sendTokenToServer(refreshedToken)
+            }
+        }
     }
 
     private fun sendTokenToServer(token: String?) {
-        val dbRef = FirebaseDatabase.getInstance().getReference()
-
+        val dbRef = FirebaseDatabase.getInstance().reference
         dbRef.child("users").child(getUserId())
-                .child("notificationTokens").setValue(token)
+                .child("notificationToken").setValue(token)
     }
 
-    private fun getUserId() : String {
-        return "edu"
+    private fun getUserId() : String? {
+        return FirebaseAuth.getInstance().currentUser?.uid
     }
 
     companion object {
-        val TAG = "InstanceIdService"
+        const val TAG = "InstanceIdService"
     }
 }

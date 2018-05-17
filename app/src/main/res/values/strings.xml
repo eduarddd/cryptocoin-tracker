@@ -17,4 +17,7 @@
 
     <string name="close">Close</string>
 
+    <string name="default_notification_channel_id">alerts</string>
+    <string name="default_notification_channel_name">Alerts</string>
+    <string name="default_notification_channel_description">Alerts</string>
 </resources>
