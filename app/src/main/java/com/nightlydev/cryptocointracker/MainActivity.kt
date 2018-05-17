@@ -1,6 +1,7 @@
 package com.nightlydev.cryptocointracker
 
 import android.content.Intent
+import android.content.Intent.*
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -43,7 +44,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun startOverviewActivity() {
         val intent = Intent(this, OverviewActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        intent.addFlags(FLAG_ACTIVITY_CLEAR_TASK or FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_NO_ANIMATION)
         startActivity(intent)
     }
 

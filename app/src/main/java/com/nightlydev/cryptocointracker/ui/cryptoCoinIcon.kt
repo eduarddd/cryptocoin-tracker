@@ -23,7 +23,7 @@ class CryptoCoinIcon @JvmOverloads constructor(
         setTypeface(typeface)
     }
 
-    fun setCoin(coin: CryptoCoin) {
+    fun bindCoin(coin: CryptoCoin) {
         text = coin.iconString(context)
         setTextColor(coin.iconColor(context))
     }

@@ -3,6 +3,7 @@ package com.nightlydev.cryptocointracker.cryptoCoinDetail
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.v4.app.FragmentTransaction
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
@@ -97,10 +98,16 @@ class CryptoCoinDetailActivity: AppCompatActivity() {
     }
 
     private fun createAlert() {
-        if (supportFragmentManager.findFragmentByTag("CREATE_ALERT_FRAGMENT") != null) return
+        //if (supportFragmentManager.findFragmentByTag("CREATE_ALERT_FRAGMENT") != null) return
 
         val fragment = CreateAlertDialogFragment.newInstance(mCryptoCoinViewModel.cryptoCoin.value!!.symbol)
-        fragment.show(supportFragmentManager, "CREATE_ALERT_FRAGMENT")
+        //fragment.show(supportFragmentManager, "CREATE_ALERT_FRAGMENT")
+
+        supportFragmentManager.beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .add(android.R.id.content, fragment)
+                .addToBackStack(null)
+                .commit()
     }
 
     private fun saveFavorite() = mCryptoCoinViewModel.saveFavorite()

@@ -22,4 +22,6 @@
     <string name="default_notification_channel_id">alerts</string>
     <string name="default_notification_channel_name">Alerts</string>
     <string name="default_notification_channel_description">Alerts</string>
+
+    <string name="create_alert">Create alert</string>
 </resources>

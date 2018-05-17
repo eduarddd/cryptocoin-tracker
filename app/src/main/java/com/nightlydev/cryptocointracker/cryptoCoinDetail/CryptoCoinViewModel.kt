@@ -1,6 +1,7 @@
 package com.nightlydev.cryptocointracker.cryptoCoinDetail
 
 import android.arch.lifecycle.*
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.nightlydev.cryptocointracker.data.CryptoCoinRepository
 import com.nightlydev.cryptocointracker.data.Resource
@@ -60,10 +61,21 @@ class CryptoCoinViewModel(cryptoCoinId: String, displayHistoryPeriod: Int) : Vie
     fun createAlert(cryptoCoin: CryptoCoin,
                     price: Double,
                     note: String = "",
-                    persistent: Boolean = false) {
+                    persistent: Boolean = false): LiveData<Resource<Nothing>> {
+        val result = MutableLiveData<Resource<Nothing>>()
+        result.value = Resource.loading()
         val alert = Alert(cryptoCoin, price, note, persistent)
 
         val dbRef = FirebaseDatabase.getInstance().reference
-        dbRef.child("alerts").push().setValue(alert)
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        dbRef.child("users").child(userId).child("alerts").push().setValue(alert).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                result.value = Resource.success(null)
+            } else {
+                result.value = Resource.error("Error creating alert")
+            }
+        }
+
+        return result
     }
 }

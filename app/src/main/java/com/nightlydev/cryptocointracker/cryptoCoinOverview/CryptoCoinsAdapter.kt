@@ -86,7 +86,7 @@ class CryptoCoinsAdapter
     }
 
     inner class CryptoCoinViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
-        private val icon = itemView.tv_icon
+        private val icon = itemView.tv_coin_icon
         private val rank = itemView.tv_rank
         private val name = itemView.tv_name
         private val priceUsd = itemView.tv_price_usd
@@ -98,7 +98,7 @@ class CryptoCoinsAdapter
 
         fun bindCryptoCoin(coin: CryptoCoin) {
             rank.text = (adapterPosition + 1).toString()
-            icon.setCoin(coin)
+            icon.bindCoin(coin)
             //rank.text = coin.rank.toString()
             name.text = itemView.context.getString(R.string.cryptocoin_name_format, coin.name, coin.symbol)
             val formattedPrice = NumberFormat.getNumberInstance().format(coin.price)
